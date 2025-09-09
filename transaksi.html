@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Transaksi Berhasil</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Press Start 2P', cursive;
+    background: linear-gradient(to bottom, #75164b 0%, #e30f7a 70%, #fff 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    color: white;
+  }
+
+  .back-arrow {
+    position: absolute;
+    top: 20px;
+    left: -700px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+  }
+
+  .back-arrow svg {
+    width: 100%;
+    height: 100%;
+    fill: white;
+  }
+
+  .circle {
+    background-color: #49b374;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    box-shadow: 15px 15px 15px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .checkmark {
+    width: 60px;
+    height: 60px;
+  }
+
+  .checkmark path {
+    fill: black;
+  }
+
+  .message {
+    margin-top: 30px;
+    font-size: 24px;
+    text-transform: uppercase;
+    text-shadow: 0 6px 0 rgba(0,0,0,0.3);
+    letter-spacing: 1px;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .message { font-size: 22px; }
+    .circle { width: 110px; height: 110px; }
+    .checkmark { width: 56px; height: 56px; }
+  }
+  @media (max-width: 768px) {
+    body, html { font-size: 14px; }
+    .message { font-size: 20px; margin-top: 24px; }
+    .circle { width: 100px; height: 100px; }
+    .checkmark { width: 50px; height: 50px; }
+    .back-arrow { top: 12px; left: 12px; width: 42px; height: 42px; }
+  }
+  @media (max-width: 480px) {
+    body, html { font-size: 13px; }
+    .message { font-size: 18px; margin-top: 20px; text-align: center; padding: 0 12px; }
+    .circle { width: 92px; height: 92px; }
+    .checkmark { width: 46px; height: 46px; }
+    .back-arrow { top: 10px; left: 10px; width: 38px; height: 38px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="back-arrow" role="button" tabindex="0" aria-label="Kembali">
+    <svg width="92" height="92" viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M36.7464 15.3333L11.5001 40.5797C10.0628 42.0174 9.25537 43.9671 9.25537 46C9.25537 48.0329 10.0628 49.9826 11.5001 51.4203L36.7464 76.6667C37.8185 77.7395 39.1848 78.4702 40.6723 78.7663C42.1599 79.0625 43.7018 78.9107 45.1031 78.3303L45.6589 78.0696C46.9154 77.4268 47.97 76.4495 48.7066 75.2456C49.4431 74.0416 49.8331 72.6577 49.8334 71.2463V61.3333H69.0001C70.0167 61.3333 70.9918 60.9295 71.7106 60.2106C72.4295 59.4917 72.8334 58.5167 72.8334 57.5V34.5L72.8066 34.0515C72.6967 33.119 72.2485 32.2593 71.5468 31.6354C70.8452 31.0115 69.939 30.6668 69.0001 30.6667L49.8334 30.6628V20.7537C49.8331 19.2376 49.3833 17.7556 48.5408 16.4951C47.6984 15.2347 46.5011 14.2523 45.1004 13.6721C43.6997 13.092 42.1585 12.9402 40.6715 13.2358C39.1845 13.5315 37.8186 14.2615 36.7464 15.3333Z" fill="#F6F4F4"/>
+        <path d="M16.9243 46L42.1668 20.7537V34.5L42.1937 34.9485C42.3035 35.881 42.7518 36.7407 43.4534 37.3646C44.155 37.9885 45.0612 38.3332 46.0002 38.3333L65.1668 38.3295V53.6628L46.0002 53.6667C44.9835 53.6667 44.0085 54.0705 43.2896 54.7894C42.5707 55.5083 42.1668 56.4833 42.1668 57.5V71.2463L16.9243 46ZM80.5001 30.6667C81.4391 30.6668 82.3453 31.0115 83.0469 31.6354C83.7485 32.2593 84.1968 33.119 84.3066 34.0515L84.3335 34.5V57.5C84.3324 58.477 83.9583 59.4168 83.2876 60.1272C82.6169 60.8377 81.7002 61.2652 80.7248 61.3225C79.7494 61.3797 78.789 61.0624 78.0398 60.4353C77.2906 59.8082 76.809 58.9187 76.6937 57.9485L76.6668 57.5V34.5C76.6668 33.4833 77.0707 32.5083 77.7896 31.7894C78.5085 31.0705 79.4835 30.6667 80.5001 30.6667Z" fill="#F6F4F4"/>
+        </svg>        
+</div>
+
+<div class="circle">
+  <svg class="checkmark" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20.285 6.709l-11.39 11.39-5.582-5.582 1.414-1.414 4.168 4.168 9.978-9.978z"/>
+  </svg>
+</div>
+
+<div class="message">Transaksi Berhasil</div>
+
+
+<script>
+  // Celebratory effects on success
+  (function() {
+    const durationMs = 6000;
+    const start = performance.now();
+
+    // 1) Confetti canvas
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    canvas.style.position = 'fixed';
+    canvas.style.left = '0';
+    canvas.style.top = '0';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '9999';
+    document.body.appendChild(canvas);
+    window.addEventListener('resize', resizeCanvas);
+
+    const colors = ['#ffffff', '#ffe066', '#ffd1dc', '#b6e3ff', '#d4bfff', '#a0ffd1'];
+    const confetti = new Array(180).fill(0).map(() => ({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * canvas.height,
+      r: 4 + Math.random() * 6,
+      vx: -1 + Math.random() * 2,
+      vy: 2 + Math.random() * 3,
+      rot: Math.random() * Math.PI,
+      vr: (-0.1 + Math.random() * 0.2),
+      color: colors[Math.floor(Math.random() * colors.length)],
+      shape: Math.random() < 0.6 ? 'rect' : 'circle'
+    }));
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        if (p.y > canvas.height + 20) {
+          p.y = -20;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        if (p.shape === 'rect') {
+          ctx.fillRect(-p.r, -p.r * 0.5, p.r * 2, p.r);
+        } else {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.r * 0.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      });
+    }
+
+    let raf;
+    function animateConfetti(t) {
+      drawConfetti();
+      if (t - start < durationMs) {
+        raf = requestAnimationFrame(animateConfetti);
+      } else {
+        cancelAnimationFrame(raf);
+        canvas.style.transition = 'opacity 400ms ease-out';
+        canvas.style.opacity = '0';
+        setTimeout(() => canvas.remove(), 450);
+      }
+    }
+    raf = requestAnimationFrame(animateConfetti);
+
+    // 2) Pulse and glow the success circle
+    const circle = document.querySelector('.circle');
+    if (circle && circle.animate) {
+      circle.animate([
+        { transform: 'scale(0.9)', boxShadow: '0 0 0 rgba(0,0,0,0)' },
+        { transform: 'scale(1.06)', boxShadow: '0 0 24px rgba(255,255,255,0.45)' },
+        { transform: 'scale(1.0)', boxShadow: '0 0 0 rgba(0,0,0,0)' }
+      ], { duration: 800, iterations: 6, easing: 'ease-in-out' });
+    }
+
+    // 3) Floating sparkles around message
+    const message = document.querySelector('.message');
+    if (message) {
+      const sparkleCount = 24;
+      for (let i = 0; i < sparkleCount; i++) {
+        const s = document.createElement('span');
+        s.textContent = ['✨','⭐','💖','💫'][Math.floor(Math.random()*4)];
+        s.style.position = 'fixed';
+        s.style.left = (10 + Math.random() * 80) + 'vw';
+        s.style.top = (40 + Math.random() * 20) + 'vh';
+        s.style.fontSize = (18 + Math.random() * 16) + 'px';
+        s.style.pointerEvents = 'none';
+        s.style.zIndex = '9999';
+        s.style.opacity = '0.9';
+        document.body.appendChild(s);
+        const driftX = (-20 + Math.random() * 40) + 'px';
+        const riseY = (60 + Math.random() * 90) + 'px';
+        s.animate([
+          { transform: 'translate(0, 0)', opacity: 0 },
+          { transform: 'translate(' + driftX + ', -' + riseY + ')', opacity: 1 },
+          { transform: 'translate(' + driftX + ', -' + (parseInt(riseY) + 40) + 'px)', opacity: 0 }
+        ], { duration: 2000 + Math.random()*1800, easing: 'ease-out', fill: 'forwards' });
+        setTimeout(() => s.remove(), 4200);
+      }
+    }
+
+    // 4) Short chime using Web Audio API
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioContext();
+      const now = audioCtx.currentTime;
+      function play(freq, when, length, type) {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = type || 'triangle';
+        o.frequency.setValueAtTime(freq, when);
+        g.gain.setValueAtTime(0, when);
+        g.gain.linearRampToValueAtTime(0.2, when + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, when + length);
+        o.connect(g).connect(audioCtx.destination);
+        o.start(when);
+        o.stop(when + length + 0.05);
+      }
+      play(784, now, 0.25, 'sine');      // G5
+      play(988, now + 0.06, 0.22, 'sine'); // B5
+      play(1319, now + 0.12, 0.28, 'sine'); // E6
+    } catch (e) {
+      // Ignore if autoplay blocked or not supported
+    }
+  })();
+
+  // Back navigation (click) to previous page if available, else to index.html
+  (function() {
+    const back = document.querySelector('.back-arrow');
+    if (back) {
+      back.addEventListener('click', () => {
+        if (document.referrer) {
+          history.back();
+        } else {
+          location.href = 'index.html';
+        }
+      });
+      back.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (document.referrer) {
+            history.back();
+          } else {
+            location.href = 'index.html';
+          }
+        }
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
