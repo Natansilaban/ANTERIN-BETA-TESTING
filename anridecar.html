@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AnRideCar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Rubik:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-top: #2b2f87; --bg-mid: #2a558a; --bg-bottom: #a8e3d8; --card: #ffffff; --ink: #0f172a; --muted: #475569; --brand: #7cc97b; --brand-ink: #0b3d21; --shadow: 0 6px 24px rgba(0,0,0,.15); --radius: 16px }
+        * { box-sizing: border-box }
+        html, body { height: 100% }
+        body { margin: 0; font-family: "Rubik", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; color: var(--ink); background: linear-gradient(180deg, var(--bg-top) 0%, #323a92 35%, #2d6d86 65%, var(--bg-bottom) 100%); }
+        .wrap { min-height: 100%; padding: 20px; display: grid; grid-template-columns: 360px 1fr; gap: 24px }
+        .left { display: grid; align-content: start; gap: 16px }
+        .search-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px }
+        .search { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 12px; border: 2px solid #e2e8f0 }
+        .search input { border: 0; outline: 0; width: 100%; font-size: 16px }
+        .saved { margin-top: 8px; display: grid; gap: 8px }
+        .saved-item { display: grid; grid-template-columns: 28px 1fr 28px; align-items: center; gap: 8px; padding: 10px; border-radius: 12px; transition: background .2s }
+        .saved-item:hover { background: #f1f5f9; cursor: pointer }
+        .order { background: var(--brand); color: white; border: 0; border-radius: 14px; padding: 14px 18px; font-weight: 800; font-size: 24px; letter-spacing: .5px; box-shadow: var(--shadow); cursor: pointer }
+        .order:disabled { opacity: .7; cursor: not-allowed }
+        .rides { display: grid; gap: 14px; align-content: start }
+        .ride { background: var(--card); color: var(--ink); border-radius: 14px; padding: 14px 16px; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; box-shadow: var(--shadow); border: 3px solid transparent; transition: transform .08s ease, border-color .15s ease }
+        .ride:active { transform: scale(.99) }
+        .ride.active { border-color: #16a34a }
+        .ride .title { font-weight: 800; font-size: 24px }
+        .ride .eta { font-weight: 800; font-size: 18px }
+        .ride .desc { grid-column: 1 / -1; color: var(--muted); margin-top: 2px }
+        .price { font-weight: 800; font-size: 22px; align-self: start }
+        .muted { color: var(--muted) }
+        .icon { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center }
+        /* Responsive */
+        @media (max-width: 980px) { .wrap { grid-template-columns: 1fr } .order { width: 100% } }
+        @media (max-width: 420px) { .search { padding: 8px } .ride { grid-template-columns: 1fr; } .price { justify-self: start } .ride .title { font-size: 20px } .ride .eta { font-size: 16px } .order { font-size: 20px } }
+    </style>
+</head>
+<body>
+    <main class="wrap" aria-label="Pemesanan AnRideCar">
+        <section class="left">
+            <div class="search-card" aria-labelledby="searchLabel">
+                <div class="search" role="search">
+                    <span class="icon" aria-hidden="true">📍</span>
+                    <input id="search" type="text" placeholder="Cari Lokasi Disini" aria-label="Cari lokasi" autocomplete="off" />
+                </div>
+                <div class="saved" id="savedList" aria-label="Lokasi tersimpan"></div>
+            </div>
+            <button id="orderBtn" class="order" disabled>PESAN</button>
+        </section>
+
+        <section class="rides" id="rides" aria-label="Pilihan layanan">
+            <!-- Items inserted by JS -->
+        </section>
+    </main>
+
+    <template id="savedItemTpl">
+        <div class="saved-item" data-action="fill-saved">
+            <span class="icon" aria-hidden="true">🕑</span>
+            <div class="name"></div>
+            <span class="icon" aria-hidden="true">🔖</span>
+        </div>
+    </template>
+
+    <template id="rideTpl">
+        <article class="ride" tabindex="0" role="button" aria-pressed="false">
+            <div>
+                <div class="title"></div>
+                <div class="eta muted"></div>
+                <div class="desc muted"></div>
+            </div>
+            <div class="price"></div>
+        </article>
+    </template>
+
+    <script>
+        const savedPlaces = [
+            { name: "SMK Metland" },
+            { name: "Metropolitan Mall" },
+            { name: "Citra Indah City" },
+            { name: "Jalan Kota Wisata" }
+        ];
+        const rideOptions = [
+            { title: "AnRide", eta: "2–4 menit", desc: "Teman jalan tiap hari", price: 22000 },
+            { title: "AnCar", eta: "5–10 menit", desc: "Andalan tiap berpegian", price: 29500 },
+            { title: "AnCar Hemat", eta: "8–13 menit", desc: "Sahabat dompet", price: 26000 },
+            { title: "AnRide Hemat", eta: "4–7 menit", desc: "Sahabat dompet", price: 20000 },
+            { title: "AnCar Prioritas", eta: "1–2 menit", desc: "Dijemput lebih cepat", price: 45000 },
+            { title: "AnCar XL", eta: "5–10 menit", desc: "Buat pergi rame-rame", price: 36000 }
+        ];
+
+        const savedListEl = document.getElementById("savedList");
+        const ridesEl = document.getElementById("rides");
+        const orderBtn = document.getElementById("orderBtn");
+        const searchInput = document.getElementById("search");
+        let selectedRideIndex = null;
+
+        function formatCurrencyIDR(amount) { return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(amount) }
+
+        function renderSaved() {
+            savedListEl.innerHTML = "";
+            const tpl = document.getElementById("savedItemTpl");
+            savedPlaces.forEach(place => {
+                const node = tpl.content.firstElementChild.cloneNode(true);
+                node.querySelector(".name").textContent = place.name;
+                node.addEventListener("click", () => {
+                    searchInput.value = place.name;
+                    searchInput.dispatchEvent(new Event("input"));
+                });
+                savedListEl.appendChild(node);
+            });
+        }
+
+        function renderRides() {
+            ridesEl.innerHTML = "";
+            const tpl = document.getElementById("rideTpl");
+            rideOptions.forEach((ride, index) => {
+                const card = tpl.content.firstElementChild.cloneNode(true);
+                card.querySelector(".title").textContent = ride.title;
+                card.querySelector(".eta").textContent = ride.eta;
+                card.querySelector(".desc").textContent = ride.desc;
+                card.querySelector(".price").textContent = formatCurrencyIDR(ride.price);
+                card.addEventListener("click", () => selectRide(index));
+                card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectRide(index) } });
+                ridesEl.appendChild(card);
+            });
+        }
+
+        function selectRide(index) {
+            selectedRideIndex = index;
+            document.querySelectorAll(".ride").forEach((el, idx) => {
+                el.classList.toggle("active", idx === index);
+                el.setAttribute("aria-pressed", String(idx === index));
+            });
+            updateOrderState();
+        }
+
+        function updateOrderState() {
+            const hasDestination = searchInput.value.trim().length > 0;
+            orderBtn.disabled = !(hasDestination && selectedRideIndex !== null);
+        }
+
+        orderBtn.addEventListener("click", () => {
+            if (orderBtn.disabled) return;
+            const ride = rideOptions[selectedRideIndex];
+            const dest = searchInput.value.trim();
+            alert(`Pesanan dibuat!\n\nLayanan: ${ride.title}\nHarga: ${formatCurrencyIDR(ride.price)}\nTujuan: ${dest}`);
+        });
+
+        searchInput.addEventListener("input", updateOrderState);
+
+        // Init
+        renderSaved();
+        renderRides();
+        updateOrderState();
+    </script>
+</body>
+</html>
+
