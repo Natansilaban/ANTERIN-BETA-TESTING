@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rating - Anterin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #16a085;
+      --text-light: #ffffff;
+      --text-dark: #2c3e50;
+      --border-radius: 50%;
+      --shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #2c3e50 0%, #3498db 50%, #ecf0f1 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* User Icon */
+    .user-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 40px auto;
+      position: relative;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .user-circle {
+      width: 100%;
+      height: 100%;
+      border: 4px solid var(--text-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+
+    .user-symbol {
+      width: 60px;
+      height: 60px;
+      position: relative;
+    }
+
+    .user-head {
+      width: 30px;
+      height: 30px;
+      border: 3px solid var(--text-light);
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .user-body {
+      width: 40px;
+      height: 20px;
+      border: 3px solid var(--text-light);
+      border-top: none;
+      border-radius: 0 0 20px 20px;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Text Prompt */
+    .prompt-text {
+      color: var(--text-light);
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 40px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    /* Star Rating System */
+    .rating-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 40px;
+      animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    .star {
+      width: 50px;
+      height: 50px;
+      border: 3px solid var(--text-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      background: transparent;
+    }
+
+    .star:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 16px rgba(255,255,255,0.3);
+    }
+
+    .star.active {
+      background: var(--text-light);
+    }
+
+    .star-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--text-light);
+      transition: fill 0.3s ease;
+    }
+
+    .star.active .star-icon {
+      fill: var(--primary-color);
+    }
+
+    .star:hover .star-icon {
+      fill: var(--text-light);
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes starGlow {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255,255,255,0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 10px rgba(255,255,255,0.1);
+      }
+    }
+
+    /* Add pulse animation to user icon */
+    .user-icon {
+      animation: fadeInDown 1s ease-out, pulse 2s ease-in-out infinite 1.5s;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        max-width: 350px;
+        padding: 0 20px;
+      }
+
+      .user-icon {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 35px;
+      }
+
+      .user-symbol {
+        width: 50px;
+        height: 50px;
+      }
+
+      .user-head {
+        width: 25px;
+        height: 25px;
+      }
+
+      .user-body {
+        width: 35px;
+        height: 18px;
+      }
+
+      .prompt-text {
+        font-size: 20px;
+        margin-bottom: 35px;
+      }
+
+      .rating-container {
+        gap: 12px;
+        margin-bottom: 35px;
+      }
+
+      .star {
+        width: 45px;
+        height: 45px;
+      }
+
+      .star-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+
+      .container {
+        max-width: 300px;
+      }
+
+      .user-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 30px;
+      }
+
+      .user-symbol {
+        width: 40px;
+        height: 40px;
+      }
+
+      .user-head {
+        width: 20px;
+        height: 20px;
+      }
+
+      .user-body {
+        width: 30px;
+        height: 15px;
+      }
+
+      .prompt-text {
+        font-size: 18px;
+        margin-bottom: 30px;
+      }
+
+      .rating-container {
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+
+      .star {
+        width: 40px;
+        height: 40px;
+      }
+
+      .star-icon {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .container {
+        max-width: 280px;
+      }
+
+      .user-icon {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 25px;
+      }
+
+      .user-symbol {
+        width: 35px;
+        height: 35px;
+      }
+
+      .user-head {
+        width: 18px;
+        height: 18px;
+      }
+
+      .user-body {
+        width: 25px;
+        height: 12px;
+      }
+
+      .prompt-text {
+        font-size: 16px;
+        margin-bottom: 25px;
+      }
+
+      .rating-container {
+        gap: 8px;
+        margin-bottom: 25px;
+      }
+
+      .star {
+        width: 35px;
+        height: 35px;
+      }
+
+      .star-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .prompt-text {
+        font-size: 14px;
+      }
+
+      .rating-container {
+        gap: 6px;
+      }
+
+      .star {
+        width: 32px;
+        height: 32px;
+      }
+
+      .star-icon {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    /* Landscape orientation adjustments */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        padding: 10px;
+      }
+
+      .user-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+      }
+
+      .user-symbol {
+        width: 30px;
+        height: 30px;
+      }
+
+      .user-head {
+        width: 15px;
+        height: 15px;
+      }
+
+      .user-body {
+        width: 20px;
+        height: 10px;
+      }
+
+      .prompt-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .rating-container {
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .star {
+        width: 35px;
+        height: 35px;
+      }
+
+      .star-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    /* High DPI displays */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .user-circle {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(180deg, #1a252f 0%, #2c3e50 50%, #34495e 100%);
+      }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .user-icon,
+      .prompt-text,
+      .rating-container {
+        animation: none;
+      }
+
+      .user-icon {
+        animation: none;
+      }
+    }
+
+    /* Touch feedback */
+    .star:active {
+      transform: scale(0.95);
+    }
+
+    /* Focus states for accessibility */
+    .star:focus {
+      outline: 3px solid rgba(255,255,255,0.5);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- User Icon -->
+    <div class="user-icon">
+      <div class="user-circle">
+        <div class="user-symbol">
+          <div class="user-head"></div>
+          <div class="user-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Text Prompt -->
+    <h1 class="prompt-text">BERI APRESIASIMU</h1>
+
+    <!-- Star Rating System -->
+    <div class="rating-container">
+      <div class="star" data-rating="1" tabindex="0" role="button" aria-label="Rate 1 star">
+        <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+      <div class="star" data-rating="2" tabindex="0" role="button" aria-label="Rate 2 stars">
+        <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+      <div class="star" data-rating="3" tabindex="0" role="button" aria-label="Rate 3 stars">
+        <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+      <div class="star" data-rating="4" tabindex="0" role="button" aria-label="Rate 4 stars">
+        <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+      <div class="star" data-rating="5" tabindex="0" role="button" aria-label="Rate 5 stars">
+        <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentRating = 0;
+    let isRated = false;
+
+    // Get all star elements
+    const stars = document.querySelectorAll('.star');
+
+    // Add click event listeners to stars
+    stars.forEach((star, index) => {
+      star.addEventListener('click', () => {
+        if (isRated) return;
+        
+        const rating = parseInt(star.dataset.rating);
+        setRating(rating);
+        isRated = true;
+        
+        // Add glow effect
+        star.style.animation = 'starGlow 0.6s ease-out';
+        
+        // Redirect to index.html after rating
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1000);
+      });
+
+      // Add hover effect
+      star.addEventListener('mouseenter', () => {
+        if (isRated) return;
+        const rating = parseInt(star.dataset.rating);
+        highlightStars(rating);
+      });
+
+      star.addEventListener('mouseleave', () => {
+        if (isRated) return;
+        highlightStars(currentRating);
+      });
+
+      // Add keyboard support
+      star.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          star.click();
+        }
+      });
+    });
+
+    // Function to set rating
+    function setRating(rating) {
+      currentRating = rating;
+      highlightStars(rating);
+      
+      // Add haptic feedback
+      if ('vibrate' in navigator) {
+        navigator.vibrate([100, 50, 100]);
+      }
+      
+      // Show rating feedback
+      showRatingFeedback(rating);
+    }
+
+    // Function to highlight stars
+    function highlightStars(rating) {
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.classList.add('active');
+        } else {
+          star.classList.remove('active');
+        }
+      });
+    }
+
+    // Function to show rating feedback
+    function showRatingFeedback(rating) {
+      const messages = {
+        1: 'Terima kasih atas feedback Anda!',
+        2: 'Terima kasih atas feedback Anda!',
+        3: 'Terima kasih atas feedback Anda!',
+        4: 'Terima kasih atas feedback yang baik!',
+        5: 'Terima kasih atas rating yang luar biasa!'
+      };
+      
+      // Create toast notification
+      const toast = document.createElement('div');
+      toast.textContent = messages[rating];
+      toast.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+      
+      document.body.appendChild(toast);
+      
+      // Show toast
+      setTimeout(() => {
+        toast.style.opacity = '1';
+      }, 10);
+      
+      // Hide toast
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+          document.body.removeChild(toast);
+        }, 300);
+      }, 2000);
+    }
+
+    // Add page load animation
+    window.addEventListener('load', function() {
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.5s ease';
+      
+      setTimeout(() => {
+        document.body.style.opacity = '1';
+      }, 100);
+    });
+
+    // Add touch support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          // Swipe left - go to next star
+          if (currentRating < 5 && !isRated) {
+            setRating(currentRating + 1);
+          }
+        } else {
+          // Swipe right - go to previous star
+          if (currentRating > 1 && !isRated) {
+            setRating(currentRating - 1);
+          }
+        }
+      }
+    }
+
+    // Auto-redirect after 15 seconds if no rating given
+    let autoRedirectTimer = setTimeout(() => {
+      if (!isRated) {
+        window.location.href = 'index.html';
+      }
+    }, 15000);
+
+    // Clear auto-redirect if user interacts
+    document.addEventListener('click', () => {
+      clearTimeout(autoRedirectTimer);
+    });
+
+    document.addEventListener('keydown', () => {
+      clearTimeout(autoRedirectTimer);
+    });
+
+    // Add celebration effect when rating is given
+    function createRatingEffect() {
+      const colors = ['#ffd700', '#ff6b9d', '#4ecdc4', '#45b7d1', '#96ceb4'];
+      const effectCount = 20;
+
+      for (let i = 0; i < effectCount; i++) {
+        const effect = document.createElement('div');
+        effect.style.cssText = `
+          position: fixed;
+          width: 8px;
+          height: 8px;
+          background: ${colors[Math.floor(Math.random() * colors.length)]};
+          top: 50%;
+          left: 50%;
+          z-index: 1000;
+          pointer-events: none;
+          animation: ratingEffect ${1 + Math.random() * 2}s ease-out forwards;
+        `;
+        
+        document.body.appendChild(effect);
+        
+        setTimeout(() => {
+          effect.remove();
+        }, 3000);
+      }
+    }
+
+    // Add rating effect animation CSS
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ratingEffect {
+        0% {
+          transform: translate(-50%, -50%) scale(0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1) rotate(360deg) translateY(-100px);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Trigger rating effect when rating is given
+    const originalSetRating = setRating;
+    setRating = function(rating) {
+      originalSetRating(rating);
+      if (rating > 0) {
+        createRatingEffect();
+      }
+    };
+  </script>
+</body>
+</html>

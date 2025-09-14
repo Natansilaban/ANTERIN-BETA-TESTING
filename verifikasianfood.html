@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Verifikasi Pembayaran</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #2d2f78 0%, #2f2f78 35%, #2f7881 70%, #cdeff4 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 540px;
+      background: linear-gradient(180deg, #ffffff 0%, #e9fcff 55%, #9be0e8 100%);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      padding: 28px 24px 32px 24px;
+      position: relative;
+    }
+
+    .back {
+      position: absolute;
+      left: -74px;
+      top: -4px;
+      width: 48px; height: 48px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 12px;
+      color: #fff; cursor: pointer; user-select: none;
+    }
+    .back svg { width: 44px; height: 44px; }
+    .back:focus { outline: 2px solid #fff; outline-offset: 4px; border-radius: 8px; }
+
+    .title {
+      font-family: 'Press Start 2P', cursive;
+      text-align: center;
+      margin: 6px 0 22px 0;
+      font-size: 1.05rem;
+      letter-spacing: 1px;
+    }
+
+    .field { margin-bottom: 16px; }
+    .input {
+      width: 100%;
+      height: 42px;
+      border-radius: 12px;
+      border: 1.5px solid #c9d6dd;
+      background: #fff7f7;
+      padding: 10px 14px;
+      font-size: 14px;
+      outline: none;
+    }
+    .input:focus { border-color: #7ab6c2; box-shadow: 0 0 0 3px rgba(122,182,194,0.25); }
+
+    .row { display: flex; gap: 10px; align-items: center; }
+    .captcha-img {
+      flex: 0 0 160px;
+      height: 34px;
+      background: #eee;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+      font-weight: 700; color: #666;
+      user-select: none;
+    }
+    .refresh-btn {
+      margin-left: auto;
+      background: transparent; border: none; color: #2b6f78; cursor: pointer;
+      font-size: 13px; padding: 4px 6px; border-radius: 6px;
+    }
+    .refresh-btn:hover, .refresh-btn:focus { background: rgba(43,111,120,0.12); outline: none; }
+
+    .confirm {
+      margin-top: 14px;
+      width: 100%; height: 44px;
+      border-radius: 12px; border: none;
+      background: #54a84d; color: #fff; font-weight: 900;
+      letter-spacing: 1px; cursor: pointer;
+    }
+    .confirm:hover, .confirm:focus { filter: brightness(1.03); outline: none; }
+
+    /* Toast */
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+      background: #111; color: #fff; padding: 10px 14px; border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25); opacity: 0; z-index: 9999;
+      transition: opacity .25s ease, transform .25s ease; }
+
+    /* Responsive tweaks */
+    @media (max-width: 680px) {
+      .back { left: 0; top: -60px; }
+    }
+    @media (max-width: 420px) {
+      .card { padding: 22px 18px 26px 18px; }
+      .title { font-size: .95rem; }
+      .captcha-img { flex-basis: 130px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="pageTransition" style="position:fixed;inset:0;background:#fff;opacity:1;pointer-events:none;transition:opacity .35s ease;z-index:2000"></div>
+  <div class="card" role="form" aria-labelledby="title">
+    <button class="back" aria-label="Kembali" onclick="history.back()">
+      <svg viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M36.746 15.333L11.5 40.58C10.063 42.017 9.255 43.967 9.255 46c0 2.033.808 3.983 2.245 5.42L36.746 76.667c1.072 1.073 2.438 1.804 3.926 2.1 1.487.296 3.03.145 4.431-.435l.556-.26a7.98 7.98 0 0 0 3.048-3.825c.737-1.204 1.127-2.588 1.127-4V61.333h19.167c1.016 0 1.991-.404 2.71-1.123A3.833 3.833 0 0 0 72.833 57.5V34.5a3.833 3.833 0 0 0-3.833-3.833H49.833V20.754a8.167 8.167 0 0 0-4.733-7.082 8.167 8.167 0 0 0-5.571-.438c-1.487.296-2.853 1.026-3.926 2.1Z" fill="#ffffff"/>
+      </svg>
+    </button>
+
+    <h1 id="title" class="title">VERIFIKASI PEMBAYARAN</h1>
+
+    <div class="field">
+      <input class="input" type="text" inputmode="numeric" placeholder="No Rekening" aria-label="No Rekening" />
+    </div>
+    <div class="field">
+      <input class="input" type="password" placeholder="Masukkan Sandi" aria-label="Masukkan Sandi" />
+    </div>
+    <div class="field">
+      <div class="row">
+        <input class="input" style="flex:1" type="text" placeholder="Kode Verifikasi" aria-label="Kode Verifikasi" />
+        <div class="captcha-img" id="captchaBox">Ep51Q vEc1Dr</div>
+        <button class="refresh-btn" type="button" id="refreshCaptcha">Ubah</button>
+      </div>
+    </div>
+
+    <button class="confirm" type="button" id="confirmBtn">KONFIRMASI</button>
+  </div>
+
+  <script>
+    // Page transition fade
+    (function(){
+      const overlay = document.getElementById('pageTransition');
+      function fadeIn(){ if (overlay) overlay.style.opacity = '0'; }
+      function fadeOut(cb){ if (!overlay){ cb(); return; } overlay.style.pointerEvents = 'auto'; overlay.style.opacity = '1'; setTimeout(cb, 280); }
+      window.addEventListener('load', fadeIn);
+      window.go = function(url){ fadeOut(() => { location.href = url; }); };
+      document.addEventListener('click', function(e){
+        const a = e.target.closest('a');
+        if (!a) return;
+        const url = a.getAttribute('href');
+        if (!url || url.startsWith('#') || a.target === '_blank') return;
+        e.preventDefault();
+        window.go(url);
+      });
+    })();
+    function showToast(message) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = message;
+      document.body.appendChild(t);
+      requestAnimationFrame(() => {
+        t.style.opacity = '1';
+        t.style.transform = 'translateX(-50%) translateY(-6px)';
+      });
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateX(-50%) translateY(0)';
+        setTimeout(() => t.remove(), 260);
+      }, 1700);
+    }
+
+    // Simple captcha rotator
+    (function() {
+      const variants = ['Ep51Q vEc1Dr','A7b9K XyZ12','Rt4Pq 9LmN','Tu7Vw 3GhJ'];
+      const box = document.getElementById('captchaBox');
+      document.getElementById('refreshCaptcha').addEventListener('click', () => {
+        const v = variants[Math.floor(Math.random()*variants.length)];
+        box.textContent = v;
+      });
+    })();
+
+    document.getElementById('confirmBtn').addEventListener('click', () => {
+      // Placeholder action: show success then go to pengantaran
+      showToast('Verifikasi berhasil');
+      setTimeout(() => { window.go('pengantaran.html'); }, 700);
+    });
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AnFood Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --radius-lg: 22px;
+      --radius-md: 12px;
+      --shadow-outer: 0 10px 28px rgba(0,0,0,0.35);
+      --shadow-inset: inset 0 0 0 2px rgba(0,0,0,0.45);
+      --surface: linear-gradient(180deg, #6ea0c9 0%, #6b76b7 55%, #6b5e97 100%);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #2f2d7e 0%, #3f44a8 30%, #2a7d86 70%, #c9e2df 100%);
+    }
+
+    .wrap {
+      margin: 18px;
+      border-radius: 18px;
+      border: 2px solid rgba(0,0,0,0.45);
+      background: var(--surface);
+      box-shadow: var(--shadow-outer);
+      padding: 24px 28px 30px 28px;
+      min-height: calc(100vh - 36px);
+      position: relative;
+    }
+
+    .back {
+      position: absolute; left: 12px; top: 8px; color: #fff; cursor: pointer; border: none; background: transparent;
+    }
+    .back svg { width: 44px; height: 44px; display: block; }
+
+    .content { display: grid; grid-template-columns: 360px 1fr 240px; gap: 28px; align-items: start; margin-top: 14px; }
+
+    .main-img { width: 100%; height: 340px; border-radius: var(--radius-lg); overflow: hidden; background: #000; box-shadow: var(--shadow-inset); transform: translateZ(0); }
+    .main-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .title { font-family: 'Libre Baskerville', serif; color: #ffffff; font-size: clamp(26px, 4.2vw, 46px); letter-spacing: .5px; margin: 6px 0 10px 0; line-height: 1.2; }
+    .subtitle { color: #e8eef6; font-weight: 700; letter-spacing: .8px; margin-bottom: 22px; font-size: clamp(14px, 1.8vw, 18px); }
+
+    .location-row { display: flex; gap: 22px; align-items: center; }
+    .location-wrap { position: relative; flex: 1; max-width: 420px; }
+    .location {
+      display: flex; align-items: center; gap: 10px; background: #fff3f3; color: #333; border: 2px solid #1e1e1e;
+      border-radius: var(--radius-md); height: 48px; padding: 0 14px; min-width: 300px; box-shadow: 0 2px 0 rgba(0,0,0,0.28) inset;
+    }
+    .location svg { width: 20px; height: 20px; }
+    .location[role="button"] { cursor: pointer; user-select: none; }
+    .loc-dropdown {
+      position: absolute; left: 0; right: 0; top: calc(100% + 6px);
+      background: #ffffff; border: 2px solid #1e1e1e; border-radius: 12px; box-shadow: var(--shadow-outer);
+      padding: 6px; display: none; max-height: 220px; overflow-y: auto; z-index: 50;
+    }
+    .loc-dropdown.open { display: block; }
+    .loc-dropdown button {
+      width: 100%; text-align: left; background: transparent; border: none; padding: 10px 10px; border-radius: 10px; cursor: pointer;
+      font-family: 'Poppins', sans-serif; font-size: 14px; color: #222;
+    }
+    .loc-dropdown button:hover, .loc-dropdown button:focus { background: #eef6ff; outline: none; }
+    .pesan {
+      width: 220px; height: 52px; border-radius: var(--radius-md); border: 2px solid #1e1e1e; background: #46a9a0; color: #fff;
+      font-weight: 900; letter-spacing: 2px; cursor: pointer; box-shadow: 0 2px 0 rgba(0,0,0,0.28) inset; position: relative; overflow: hidden;
+    }
+
+    .divider { margin: 26px 0; height: 6px; border-radius: 4px; background: linear-gradient(90deg, #66bbcc, #6f5b91); box-shadow: inset 0 1px 0 rgba(255,255,255,0.35); }
+
+    .thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+    .thumb { height: 180px; border-radius: var(--radius-lg); overflow: hidden; background: #000; box-shadow: var(--shadow-inset); cursor: pointer; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      #pageTransition { transition: none !important; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .content { grid-template-columns: 320px 1fr; }
+      .pesan { justify-self: start; grid-column: span 2; }
+    }
+    @media (max-width: 720px) {
+      .content { grid-template-columns: 1fr; }
+      .main-img { height: 260px; }
+      .location { min-width: 0; flex: 1; }
+      .thumbs { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="pageTransition" style="position:fixed;inset:0;background:#fff;opacity:1;pointer-events:none;transition:opacity .35s ease;z-index:2000"></div>
+
+  <div class="wrap">
+    <button class="back" aria-label="Kembali" onclick="go('index.html')">
+      <svg viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M36.746 15.333 11.5 40.58A7.667 7.667 0 0 0 9.255 46c0 2.033.808 3.983 2.245 5.42L36.746 76.667a8.17 8.17 0 0 0 8.357 1.665l.556-.26a7.98 7.98 0 0 0 3.048-3.825c.737-1.204 1.127-2.588 1.127-4V61.333h19.167a3.833 3.833 0 0 0 3.833-3.833V34.5a3.833 3.833 0 0 0-3.833-3.833H49.833V20.754a8.167 8.167 0 0 0-10.304-7.52Z" fill="#ffffff"/></svg>
+    </button>
+
+    <div class="content">
+      <div class="main-img">
+        <img src="https://i.pinimg.com/1200x/14/bc/51/14bc517d7df32ccba54d4a83489d46b9.jpg" alt="Menu utama" />
+      </div>
+
+      <div>
+        <div class="title">PILIH MAKANAN</div>
+        <div class="subtitle">DESKRIPSI MAKANAN</div>
+        <div class="location-row">
+          <div class="location-wrap">
+            <div class="location" id="locBtn" role="button" aria-haspopup="listbox" aria-expanded="false">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s7-6.274 7-11.2C19 6.149 15.866 3 12 3S5 6.149 5 9.8C5 14.726 12 21 12 21Z" stroke="#111" stroke-width="2"/><circle cx="12" cy="9.8" r="2.3" stroke="#111" stroke-width="2"/></svg>
+              <span id="locText">Lokasi Anda</span>
+            </div>
+            <div class="loc-dropdown" id="locDropdown" role="listbox" aria-label="Pilih lokasi"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; align-items:flex-start;">
+        <button class="pesan" type="button" id="orderBtn">PESAN</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="thumbs">
+      <div class="thumb"><img src="https://i.pinimg.com/736x/0f/ac/c4/0facc46c76adb7d45b28039f36262b65.jpg" alt="Bor celle Spesialit Lalapan Sambal" data-title="Bor celle Spesialit" data-desc="Lalapan segar dengan sambal spesial."></div>
+      <div class="thumb"><img src="https://i.pinimg.com/736x/db/03/50/db035078fc431bda5b3e65f6547dd75c.jpg" alt="Super Delicious Menu" data-title="Super Delicious Menu" data-desc="Pilihan menu enak favorit pelanggan."></div>
+      <div class="thumb"><img src="https://i.pinimg.com/736x/80/5f/5a/805f5aea76993a695903222449693d2d.jpg" alt="Seafood Restaurant" data-title="Seafood Restaurant" data-desc="Aneka hidangan laut segar dan lezat."></div>
+      <div class="thumb"><img src="https://i.pinimg.com/736x/03/37/bc/0337bc665b7bc71e3740decb3f1426d1.jpg" alt="Ayam geprek" data-title="Ayam geprek" data-desc="Geprekan ayam dan sambal yang menggoda."></div>
+    </div>
+  </div>
+
+  <script>
+    // Page transition fade
+    (function(){
+      const overlay = document.getElementById('pageTransition');
+      function fadeIn(){ if (overlay) overlay.style.opacity = '0'; }
+      function fadeOut(cb){ if (!overlay){ cb(); return; } overlay.style.pointerEvents = 'auto'; overlay.style.opacity = '1'; setTimeout(cb, 280); }
+      window.addEventListener('load', fadeIn);
+      window.go = function(url){ fadeOut(() => { location.href = url; }); };
+      document.addEventListener('click', function(e){
+        const a = e.target.closest('a');
+        if (!a) return;
+        const url = a.getAttribute('href');
+        if (!url || url.startsWith('#') || a.target === '_blank') return;
+        e.preventDefault();
+        window.go(url);
+      });
+    })();
+
+    // Interactive gallery: click a thumbnail to set the main image + title/desc
+    (function(){
+      const mainImg = document.querySelector('.main-img img');
+      const titleEl = document.querySelector('.title');
+      const descEl = document.querySelector('.subtitle');
+      const thumbs = Array.from(document.querySelectorAll('.thumb img'));
+      thumbs.forEach(img => {
+        img.addEventListener('click', () => {
+          if (!mainImg) return;
+          mainImg.style.transition = 'transform 240ms ease, opacity 220ms ease';
+          mainImg.style.transform = 'scale(1.02)';
+          mainImg.style.opacity = '0.0';
+          const newSrc = img.currentSrc || img.src;
+          const newTitle = img.dataset.title || img.alt || 'Menu';
+          const newDesc = img.dataset.desc || ('Deskripsi ' + newTitle);
+          setTimeout(() => { mainImg.src = newSrc; }, 110);
+          setTimeout(() => { mainImg.style.transform = 'scale(1)'; mainImg.style.opacity = '1'; }, 160);
+          if (titleEl) titleEl.textContent = newTitle.toUpperCase();
+          if (descEl) descEl.textContent = newDesc.toUpperCase();
+        });
+      });
+    })();
+
+    // Location dropdown with Cibubur area suggestions
+    (function(){
+      const btn = document.getElementById('locBtn');
+      const text = document.getElementById('locText');
+      const dd = document.getElementById('locDropdown');
+      if (!btn || !dd || !text) return;
+      const options = [
+        'Citra Indah City',
+        'SMK Metland School',
+        'Metropolitan Mall',
+        'Cibubur Junction',
+        'Trans Studio Mall Cibubur',
+        'Kota Wisata Cibubur',
+        'Leuwinanggung',
+        'Cileungsi',
+        'Cimanggis',
+        'Gunung Putri'
+      ];
+      dd.innerHTML = options.map(o => `<button type="button" role="option">${o}</button>`).join('');
+
+      function open() { dd.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+      function close() { dd.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+      btn.addEventListener('click', (e)=>{ e.stopPropagation(); dd.classList.contains('open') ? close() : open(); });
+      dd.addEventListener('click', (e)=>{
+        const b = e.target.closest('button'); if (!b) return;
+        text.textContent = b.textContent; close();
+      });
+      document.addEventListener('click', (e)=>{ if (!dd.contains(e.target) && e.target !== btn) close(); });
+      btn.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); if(e.key==='Enter'||e.key===' '){ e.preventDefault(); btn.click(); }});
+    })();
+
+    // Subtle parallax on main image container
+    (function(){
+      const box = document.querySelector('.main-img');
+      if (!box) return;
+      let enter = false;
+      box.addEventListener('mousemove', (e) => {
+        if (!enter) return;
+        const r = box.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        box.style.transform = `translateZ(0) rotateX(${(-py*2).toFixed(2)}deg) rotateY(${(px*2).toFixed(2)}deg)`;
+      });
+      box.addEventListener('mouseenter', ()=>{ enter = true; box.style.transition = 'transform 160ms ease'; });
+      box.addEventListener('mouseleave', ()=>{ enter = false; box.style.transform = 'translateZ(0)'; });
+    })();
+
+    // Order button: ripple + loading state then go to verifikasi.html
+    (function(){
+      const btn = document.getElementById('orderBtn');
+      if (!btn) return;
+      btn.addEventListener('click', function(ev){
+        // ripple
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height)*1.4;
+        const circle = document.createElement('span');
+        circle.style.position='absolute'; circle.style.left = (ev.clientX-rect.left-size/2)+ 'px'; circle.style.top = (ev.clientY-rect.top-size/2)+'px';
+        circle.style.width = size+'px'; circle.style.height=size+'px'; circle.style.borderRadius='50%'; circle.style.background='rgba(255,255,255,0.35)'; circle.style.transform='scale(0)'; circle.style.transition='transform 400ms ease, opacity 520ms ease'; circle.style.pointerEvents='none';
+        btn.appendChild(circle); requestAnimationFrame(()=>{ circle.style.transform='scale(1)'; circle.style.opacity='0'; }); setTimeout(()=>circle.remove(), 540);
+        // loading state
+        btn.disabled = true; const old = btn.textContent; btn.textContent = 'MEMPROSES...';
+        setTimeout(()=> { btn.textContent = old; btn.disabled = false; go('verifikasianfood.html'); }, 700);
+      });
+      // keyboard
+      btn.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); btn.click(); }});
+    })();
+  </script>
+</body>
+</html>
+
+

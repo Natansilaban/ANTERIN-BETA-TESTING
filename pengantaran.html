@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pengantaran - Anterin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #363A82;
+      --secondary-color: #358791;
+      --accent-color: #46a9a0;
+      --text-dark: #1e1e1e;
+      --text-light: #ffffff;
+      --surface-light: #f8f9fa;
+      --border-radius: 12px;
+      --shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #f0f2f5 0%, #e8ecf0 100%);
+      min-height: 100vh;
+      color: var(--text-dark);
+    }
+
+    .container {
+      max-width: 100vw;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: var(--text-light);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .back-btn:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .back-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      flex: 1;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .action-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: var(--text-light);
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    .action-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Map Section */
+    .map-section {
+      flex: 1;
+      position: relative;
+      background: #f5f5f5;
+      min-height: 60vh;
+      overflow: hidden;
+    }
+
+    .map-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #e8f4f8;
+      background-image: 
+        linear-gradient(90deg, #d1e7dd 0%, #e8f4f8 25%, #d1e7dd 50%, #e8f4f8 75%, #d1e7dd 100%),
+        linear-gradient(0deg, #d1e7dd 0%, #e8f4f8 25%, #d1e7dd 50%, #e8f4f8 75%, #d1e7dd 100%);
+      background-size: 40px 40px;
+    }
+
+    .map-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 30% 40%, rgba(54, 58, 130, 0.05) 0%, transparent 60%),
+        radial-gradient(circle at 70% 60%, rgba(53, 135, 145, 0.05) 0%, transparent 60%);
+    }
+
+    /* Map Roads */
+    .map-roads {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .road {
+      position: absolute;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .road-horizontal {
+      height: 8px;
+      width: 100%;
+    }
+
+    .road-vertical {
+      width: 8px;
+      height: 100%;
+    }
+
+    .road-diagonal {
+      width: 6px;
+      height: 100px;
+      background: #ffffff;
+      transform-origin: center;
+    }
+
+    /* Main roads */
+    .road-main-1 { top: 20%; left: 0; width: 100%; height: 12px; background: #ffffff; }
+    .road-main-2 { top: 0; left: 30%; width: 12px; height: 100%; background: #ffffff; }
+    .road-main-3 { top: 60%; left: 0; width: 100%; height: 10px; background: #ffffff; }
+    .road-main-4 { top: 0; left: 70%; width: 10px; height: 100%; background: #ffffff; }
+
+    /* Secondary roads */
+    .road-secondary-1 { top: 35%; left: 0; width: 100%; height: 6px; background: #f8f9fa; }
+    .road-secondary-2 { top: 0; left: 50%; width: 6px; height: 100%; background: #f8f9fa; }
+    .road-secondary-3 { top: 75%; left: 0; width: 100%; height: 5px; background: #f8f9fa; }
+    .road-secondary-4 { top: 0; left: 15%; width: 5px; height: 100%; background: #f8f9fa; }
+    .road-secondary-5 { top: 0; left: 85%; width: 5px; height: 100%; background: #f8f9fa; }
+
+    /* Buildings and POIs */
+    .building {
+      position: absolute;
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .building-large {
+      width: 40px;
+      height: 30px;
+    }
+
+    .building-medium {
+      width: 25px;
+      height: 20px;
+    }
+
+    .building-small {
+      width: 15px;
+      height: 12px;
+    }
+
+    /* Metland Cileungsi Building */
+    .metland-building {
+      position: absolute;
+      top: 25%;
+      left: 45%;
+      width: 60px;
+      height: 45px;
+      background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+      border: 2px solid #2c5aa0;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 8px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .metland-building::before {
+      content: 'METLAND';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .metland-building::after {
+      content: 'CILEUNGSI';
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 6px;
+    }
+
+    /* Other buildings */
+    .building-1 { top: 15%; left: 20%; }
+    .building-2 { top: 15%; left: 70%; }
+    .building-3 { top: 40%; left: 10%; }
+    .building-4 { top: 40%; left: 80%; }
+    .building-5 { top: 65%; left: 25%; }
+    .building-6 { top: 65%; left: 75%; }
+    .building-7 { top: 80%; left: 40%; }
+    .building-8 { top: 80%; left: 60%; }
+
+    /* Green areas */
+    .green-area {
+      position: absolute;
+      background: #a8e6a3;
+      border-radius: 50%;
+      opacity: 0.7;
+    }
+
+    .green-area-1 { top: 10%; left: 5%; width: 30px; height: 30px; }
+    .green-area-2 { top: 50%; left: 90%; width: 25px; height: 25px; }
+    .green-area-3 { top: 85%; left: 15%; width: 35px; height: 35px; }
+
+    /* Route Visualization */
+    .route {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 50%, #4CAF50 100%);
+      transform: translateY(-50%);
+      border-radius: 2px;
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .route::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 50%, #4CAF50 100%);
+      border-radius: 4px;
+      opacity: 0.3;
+    }
+
+    /* Real-time Driver Movement */
+    .driver-marker {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: #f44336;
+      border: 3px solid white;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+      z-index: 10;
+      transition: all 0.5s ease;
+      animation: driverPulse 2s ease-in-out infinite;
+    }
+
+    .driver-marker::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .driver-marker::after {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 8px solid #f44336;
+      transform: translateX(-50%);
+    }
+
+    @keyframes driverPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+      }
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(244, 67, 54, 0.6);
+      }
+    }
+
+    /* Moving Route Animation */
+    .route-moving {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 50%, #4CAF50 100%);
+      transform: translateY(-50%);
+      border-radius: 2px;
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+      overflow: hidden;
+    }
+
+    .route-moving::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
+      animation: routeFlow 3s linear infinite;
+    }
+
+    @keyframes routeFlow {
+      0% {
+        left: -100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+
+    /* Live Location Updates */
+    .location-update {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(76, 175, 80, 0.9);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      animation: locationUpdate 1s ease-in-out;
+    }
+
+    @keyframes locationUpdate {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Traffic Indicators */
+    .traffic-indicator {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      animation: trafficBlink 1.5s ease-in-out infinite;
+    }
+
+    .traffic-green {
+      background: #4CAF50;
+      top: 30%;
+      left: 25%;
+    }
+
+    .traffic-yellow {
+      background: #FFC107;
+      top: 45%;
+      left: 60%;
+    }
+
+    .traffic-red {
+      background: #f44336;
+      top: 70%;
+      left: 35%;
+    }
+
+    @keyframes trafficBlink {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    /* Real-time Status */
+    .status-indicator {
+      position: absolute;
+      top: 50px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #4CAF50;
+      border-radius: 50%;
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+      }
+    }
+
+    /* Route Points */
+    .route-point {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 3px solid var(--text-light);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .start-point {
+      top: 50%;
+      left: 15%;
+      background: #f44336;
+      transform: translateY(-50%);
+    }
+
+    .end-point {
+      top: 50%;
+      right: 15%;
+      background: #4CAF50;
+      transform: translateY(-50%);
+    }
+
+    /* POI Markers */
+    .poi-marker {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: var(--accent-color);
+      border: 2px solid var(--text-light);
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .poi-marker:nth-child(1) { top: 25%; left: 20%; }
+    .poi-marker:nth-child(2) { top: 35%; left: 30%; }
+    .poi-marker:nth-child(3) { top: 45%; left: 40%; }
+    .poi-marker:nth-child(4) { top: 55%; left: 50%; }
+    .poi-marker:nth-child(5) { top: 65%; left: 60%; }
+    .poi-marker:nth-child(6) { top: 75%; left: 70%; }
+
+    /* Route Info */
+    .route-info {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(255,255,255,0.95);
+      padding: 12px 16px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .route-info .time {
+      color: var(--accent-color);
+      font-size: 16px;
+    }
+
+    /* Driver Panel */
+    .driver-panel {
+      background: linear-gradient(135deg, #2c5f6b 0%, #3a7a85 100%);
+      color: var(--text-light);
+      padding: 24px 20px;
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+      margin-top: auto;
+    }
+
+    .driver-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .driver-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+
+    .driver-avatar svg {
+      width: 30px;
+      height: 30px;
+      fill: var(--text-light);
+    }
+
+    .driver-details h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .driver-details p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 2px;
+    }
+
+    .vehicle-info {
+      background: rgba(255,255,255,0.1);
+      padding: 12px 16px;
+      border-radius: var(--border-radius);
+      margin-bottom: 20px;
+    }
+
+    .vehicle-info p {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .vehicle-info p:last-child {
+      margin-bottom: 0;
+    }
+
+    .eta-section {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .eta-label {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 4px;
+    }
+
+    .eta-time {
+      font-size: 24px;
+      font-weight: 900;
+      color: #4CAF50;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-cancel {
+      background: #f44336;
+      color: var(--text-light);
+    }
+
+    .btn-cancel:hover {
+      background: #d32f2f;
+      transform: translateY(-1px);
+    }
+
+    .btn-chat {
+      background: #4CAF50;
+      color: var(--text-light);
+    }
+
+    .btn-chat:hover {
+      background: #45a049;
+      transform: translateY(-1px);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header {
+        padding: 12px 16px;
+      }
+
+      .header-title {
+        font-size: 16px;
+      }
+
+      .map-section {
+        min-height: 50vh;
+      }
+
+      /* Responsive map elements */
+      .metland-building {
+        width: 50px;
+        height: 38px;
+        font-size: 7px;
+      }
+
+      .metland-building::before {
+        font-size: 7px;
+        top: 6px;
+      }
+
+      .metland-building::after {
+        font-size: 5px;
+        bottom: 6px;
+      }
+
+      .building-large {
+        width: 35px;
+        height: 25px;
+      }
+
+      .building-medium {
+        width: 20px;
+        height: 16px;
+      }
+
+      .building-small {
+        width: 12px;
+        height: 10px;
+      }
+
+      .location-label {
+        font-size: 9px !important;
+        padding: 3px 6px !important;
+      }
+
+      .driver-panel {
+        padding: 20px 16px;
+      }
+
+      .driver-info {
+        gap: 12px;
+      }
+
+      .driver-avatar {
+        width: 50px;
+        height: 50px;
+      }
+
+      .driver-avatar svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .driver-details h3 {
+        font-size: 16px;
+      }
+
+      .driver-details p {
+        font-size: 13px;
+      }
+
+      .eta-time {
+        font-size: 20px;
+      }
+
+      .btn {
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 10px 12px;
+      }
+
+      .header-title {
+        font-size: 14px;
+      }
+
+      .action-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      .map-section {
+        min-height: 45vh;
+      }
+
+      /* Responsive map elements for mobile */
+      .metland-building {
+        width: 40px;
+        height: 30px;
+        font-size: 6px;
+      }
+
+      .metland-building::before {
+        font-size: 6px;
+        top: 5px;
+      }
+
+      .metland-building::after {
+        font-size: 4px;
+        bottom: 5px;
+      }
+
+      .building-large {
+        width: 30px;
+        height: 20px;
+      }
+
+      .building-medium {
+        width: 18px;
+        height: 14px;
+      }
+
+      .building-small {
+        width: 10px;
+        height: 8px;
+      }
+
+      .location-label {
+        font-size: 8px !important;
+        padding: 2px 4px !important;
+      }
+
+      .road-main-1, .road-main-2, .road-main-3, .road-main-4 {
+        height: 8px;
+        width: 8px;
+      }
+
+      .road-secondary-1, .road-secondary-2, .road-secondary-3, .road-secondary-4, .road-secondary-5 {
+        height: 4px;
+        width: 4px;
+      }
+
+      .driver-panel {
+        padding: 16px 12px;
+      }
+
+      .driver-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+      }
+
+      .driver-avatar {
+        width: 45px;
+        height: 45px;
+      }
+
+      .vehicle-info {
+        padding: 10px 12px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .btn {
+        padding: 10px 14px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .header {
+        padding: 8px 10px;
+      }
+
+      .driver-panel {
+        padding: 14px 10px;
+      }
+
+      .eta-time {
+        font-size: 18px;
+      }
+    }
+
+    /* Animation for route */
+    .route {
+      animation: routePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes routePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Loading state */
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Ripple effect */
+    .ripple {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ripple::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .ripple:active::before {
+      width: 300px;
+      height: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <button class="back-btn" onclick="goBack()" aria-label="Kembali">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <h1 class="header-title">Pengantaran</h1>
+      <div class="header-actions">
+        <button class="action-btn" onclick="refreshLocation()">Refresh</button>
+        <button class="action-btn" onclick="shareLocation()">Share</button>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-section">
+      <div class="map-container">
+        <div class="map-overlay"></div>
+        
+        <!-- Map Roads -->
+        <div class="map-roads">
+          <!-- Main roads -->
+          <div class="road road-main-1"></div>
+          <div class="road road-main-2"></div>
+          <div class="road road-main-3"></div>
+          <div class="road road-main-4"></div>
+          
+          <!-- Secondary roads -->
+          <div class="road road-secondary-1"></div>
+          <div class="road road-secondary-2"></div>
+          <div class="road road-secondary-3"></div>
+          <div class="road road-secondary-4"></div>
+          <div class="road road-secondary-5"></div>
+        </div>
+        
+        <!-- Buildings -->
+        <div class="building building-large building-1"></div>
+        <div class="building building-medium building-2"></div>
+        <div class="building building-small building-3"></div>
+        <div class="building building-medium building-4"></div>
+        <div class="building building-small building-5"></div>
+        <div class="building building-large building-6"></div>
+        <div class="building building-small building-7"></div>
+        <div class="building building-medium building-8"></div>
+        
+        <!-- Metland Cileungsi Building -->
+        <div class="metland-building"></div>
+        
+        <!-- Green Areas -->
+        <div class="green-area green-area-1"></div>
+        <div class="green-area green-area-2"></div>
+        <div class="green-area green-area-3"></div>
+        
+        <!-- Real-time Status -->
+        <div class="status-indicator">
+          <div class="status-dot"></div>
+          <span>LIVE</span>
+        </div>
+
+        <!-- Traffic Indicators -->
+        <div class="traffic-indicator traffic-green"></div>
+        <div class="traffic-indicator traffic-yellow"></div>
+        <div class="traffic-indicator traffic-red"></div>
+
+        <!-- Moving Route -->
+        <div class="route-moving"></div>
+        
+        <!-- Driver Marker (Real-time) -->
+        <div class="driver-marker" id="driverMarker"></div>
+        
+        <!-- Route Points -->
+        <div class="route-point start-point"></div>
+        <div class="route-point end-point"></div>
+        
+        <!-- POI Markers -->
+        <div class="poi-marker"></div>
+        <div class="poi-marker"></div>
+        <div class="poi-marker"></div>
+        <div class="poi-marker"></div>
+        <div class="poi-marker"></div>
+        <div class="poi-marker"></div>
+        
+        <!-- Route Info -->
+        <div class="route-info">
+          <div class="time">8 mnt</div>
+          <div>1.5 km</div>
+        </div>
+        
+        <!-- Location Labels -->
+        <div class="location-label" style="position: absolute; top: 15%; left: 20%; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">SMK Metland</div>
+        <div class="location-label" style="position: absolute; top: 25%; left: 45%; background: rgba(74, 144, 226, 0.9); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Metland Cileungsi</div>
+        <div class="location-label" style="position: absolute; top: 40%; left: 10%; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Kost</div>
+        <div class="location-label" style="position: absolute; top: 65%; left: 25%; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Royal Cileungsi</div>
+        <div class="location-label" style="position: absolute; top: 80%; left: 40%; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">KFC Harvest City</div>
+      </div>
+    </div>
+
+    <!-- Driver Panel -->
+    <div class="driver-panel">
+      <div class="driver-info">
+        <div class="driver-avatar">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="driver-details">
+          <h3>Driver</h3>
+          <p>Natan</p>
+        </div>
+      </div>
+
+      <div class="vehicle-info">
+        <p><strong>Kendaraan:</strong> Ducati superlegerra v4</p>
+        <p><strong>Warna:</strong> Merah carbon</p>
+        <p><strong>PLAT NO:</strong> B 777 JKL</p>
+      </div>
+
+      <div class="eta-section">
+        <div class="eta-label">Estimasi</div>
+        <div class="eta-time">17 Mnt</div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-cancel ripple" onclick="cancelOrder()">Batalkan</button>
+        <button class="btn btn-chat ripple" onclick="chatDriver()">Chat driver</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Page transition and navigation
+    function goBack() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Action functions
+    function refreshLocation() {
+      showToast('Memperbarui lokasi...');
+      // Simulate location refresh
+      setTimeout(() => {
+        showToast('Lokasi diperbarui');
+      }, 1000);
+    }
+
+    function shareLocation() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Lokasi Pengantaran Anterin',
+          text: 'Saya sedang menunggu pengantaran dari Anterin',
+          url: window.location.href
+        });
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          showToast('Link berhasil disalin');
+        });
+      }
+    }
+
+    function cancelOrder() {
+      if (confirm('Apakah Anda yakin ingin membatalkan pesanan?')) {
+        showToast('Pesanan dibatalkan');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+      }
+    }
+
+    function chatDriver() {
+      showToast('Membuka chat dengan driver...');
+      // Simulate opening chat
+      setTimeout(() => {
+        showToast('Chat dengan driver dibuka');
+      }, 1000);
+    }
+
+    // Toast notification
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.textContent = message;
+      toast.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+      
+      document.body.appendChild(toast);
+      
+      // Show toast
+      setTimeout(() => {
+        toast.style.opacity = '1';
+      }, 10);
+      
+      // Hide toast
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+          document.body.removeChild(toast);
+        }, 300);
+      }, 2000);
+    }
+
+    // Simulate real-time updates
+    function updateETA() {
+      const etaElement = document.querySelector('.eta-time');
+      if (etaElement) {
+        let currentTime = parseInt(etaElement.textContent);
+        if (currentTime > 1) {
+          currentTime--;
+          etaElement.textContent = currentTime + ' Mnt';
+        } else {
+          etaElement.textContent = 'Tiba';
+          etaElement.style.color = '#4CAF50';
+          // Redirect to completion page after 2 seconds
+          setTimeout(() => {
+            window.location.href = 'pesanansampai.html';
+          }, 2000);
+        }
+      }
+    }
+
+    // Update ETA every 20 seconds (for testing - normally would be 60000ms = 1 minute)
+    setInterval(updateETA, 2000);
+
+    // Add loading states to buttons
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.classList.add('loading');
+        setTimeout(() => {
+          this.classList.remove('loading');
+        }, 1000);
+      });
+    });
+
+    // Add ripple effect to buttons
+    document.querySelectorAll('.ripple').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          left: ${x}px;
+          top: ${y}px;
+          background: rgba(255,255,255,0.3);
+          border-radius: 50%;
+          transform: scale(0);
+          animation: ripple 0.6s linear;
+          pointer-events: none;
+        `;
+        
+        this.appendChild(ripple);
+        
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+
+    // Add CSS for ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Real-time driver movement simulation
+    let driverPosition = { x: 15, y: 50 }; // Starting position (percentage)
+    let isMoving = true;
+    let movementInterval;
+
+    function moveDriver() {
+      if (!isMoving) return;
+      
+      const driverMarker = document.getElementById('driverMarker');
+      if (!driverMarker) return;
+
+      // Simulate movement along the route
+      driverPosition.x += 0.5; // Move right
+      
+      // Add some vertical variation to simulate real road movement
+      driverPosition.y = 50 + Math.sin(driverPosition.x * 0.1) * 5;
+      
+      // Update driver position
+      driverMarker.style.left = driverPosition.x + '%';
+      driverMarker.style.top = driverPosition.y + '%';
+      
+      // Check if driver reached destination
+      if (driverPosition.x >= 85) {
+        isMoving = false;
+        clearInterval(movementInterval);
+        showLocationUpdate('Driver telah tiba di lokasi!');
+        setTimeout(() => {
+          window.location.href = 'pesanansampai.html';
+        }, 2000);
+      }
+    }
+
+    // Start driver movement
+    function startDriverMovement() {
+      const driverMarker = document.getElementById('driverMarker');
+      if (driverMarker) {
+        driverMarker.style.left = driverPosition.x + '%';
+        driverMarker.style.top = driverPosition.y + '%';
+        movementInterval = setInterval(moveDriver, 100); // Update every 100ms
+      }
+    }
+
+    // Location update notifications
+    function showLocationUpdate(message) {
+      const existingUpdate = document.querySelector('.location-update');
+      if (existingUpdate) {
+        existingUpdate.remove();
+      }
+
+      const updateDiv = document.createElement('div');
+      updateDiv.className = 'location-update';
+      updateDiv.textContent = message;
+      document.querySelector('.map-container').appendChild(updateDiv);
+
+      setTimeout(() => {
+        updateDiv.remove();
+      }, 3000);
+    }
+
+    // Real-time ETA updates
+    function updateRealTimeETA() {
+      const etaElement = document.querySelector('.eta-time');
+      if (etaElement && isMoving) {
+        let currentTime = parseInt(etaElement.textContent);
+        if (currentTime > 1) {
+          // Calculate ETA based on driver progress
+          const progress = (driverPosition.x - 15) / 70; // Progress from 15% to 85%
+          const remainingTime = Math.max(1, Math.round(currentTime * (1 - progress)));
+          etaElement.textContent = remainingTime + ' Mnt';
+        }
+      }
+    }
+
+    // Traffic status updates
+    function updateTrafficStatus() {
+      const trafficLights = document.querySelectorAll('.traffic-indicator');
+      trafficLights.forEach(light => {
+        // Randomly change traffic status
+        if (Math.random() < 0.1) { // 10% chance to change
+          const colors = ['#4CAF50', '#FFC107', '#f44336'];
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          light.style.background = randomColor;
+        }
+      });
+    }
+
+    // Simulate real-time location updates
+    function simulateLocationUpdates() {
+      const messages = [
+        'Lokasi diperbarui',
+        'Driver sedang menuju lokasi',
+        'Perkiraan 5 menit lagi',
+        'Driver sudah dekat',
+        'Tunggu sebentar...'
+      ];
+      
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+      showLocationUpdate(randomMessage);
+    }
+
+    // Initialize real-time features
+    document.addEventListener('DOMContentLoaded', function() {
+      showToast('Melacak pengantaran...');
+      
+      // Start real-time features
+      setTimeout(() => {
+        startDriverMovement();
+        showLocationUpdate('Driver sedang menuju lokasi Anda');
+      }, 1000);
+
+      // Update ETA every 2 seconds
+      setInterval(updateRealTimeETA, 2000);
+      
+      // Update traffic status every 5 seconds
+      setInterval(updateTrafficStatus, 5000);
+      
+      // Show random location updates every 10 seconds
+      setInterval(simulateLocationUpdates, 10000);
+    });
+
+    // Pause movement when page is not visible
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        isMoving = false;
+        clearInterval(movementInterval);
+      } else {
+        isMoving = true;
+        if (!movementInterval) {
+          startDriverMovement();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

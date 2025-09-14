@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Anterin</title>
+  <style>
+  /* Reset and base */
+  * {
+      box-sizing: border-box;
+    }
+    body {
+    margin:0;
+    font-family: 'Poppins', sans-serif;
+      background: #fff;
+    color: #000;
+  }
+
+  /* Navbar */
+  nav {
+    background: linear-gradient(180deg, #363A82 18.75%, #358791 92.87%, #FFFFFF 100%);
+      display: flex;
+      align-items: center;
+    padding: 10px 20px;
+    color: white;
+    position: relative;
+  }
+  nav .logo {
+    font-weight: 900;
+    font-size: 26px;
+      flex-shrink: 0;
+    }
+  nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+      display: flex;
+    gap: 25px;
+    margin-left: 30px;
+    font-weight: 700;
+  }
+  nav ul li {
+    cursor: pointer;
+  }
+  nav .profile, nav .search, nav .login {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  /* Profile icon */
+  nav .profile {
+    background: #000;
+    width: 38px;
+    height: 38px;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+  }
+  nav .profile svg {
+    fill: #fff;
+      width: 20px;
+      height: 20px;
+  }
+  nav .profile img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Profile dropdown menu */
+  .profile-menu {
+    position: absolute;
+    right: 20px;
+    top: 58px;
+    background: #ffffff;
+    color: #222;
+    border-radius: 10px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.2);
+    padding: 8px;
+    min-width: 180px;
+    display: none;
+    z-index: 1000;
+  }
+  .profile-menu.open { display: block; }
+  .profile-menu button {
+    width: 100%;
+    background: transparent;
+    border: none;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #222;
+  }
+  .profile-menu button:hover,
+  .profile-menu button:focus {
+    background: #f1f1f1;
+    outline: none;
+  }
+
+  /* Search bar */
+  nav .search {
+    background: white;
+    border-radius: 8px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+      max-width: 220px;
+    position: relative;
+  }
+  nav .search svg {
+    width: 18px;
+    height: 18px;
+    fill: #000;
+    margin-right: 7px;
+  }
+  nav .search input {
+    border: none;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #000;
+    background: transparent;
+      width: 100%;
+  }
+
+  /* Search history dropdown */
+  .search-history {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    color: #111;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    padding: 6px;
+    display: none;
+    z-index: 1000;
+  }
+  .search-history.open { display: block; }
+  .search-history button {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #111;
+    cursor: pointer;
+  }
+  .search-history button:hover,
+  .search-history button:focus { background: #f3f3f3; outline: none; }
+
+  /* Login Button */
+  nav .login button {
+    font-weight: 800;
+    font-size: 15px;
+    padding: 8px 20px;
+    border: 2px solid white;
+      background: transparent;
+      border-radius: 5px;
+    color: white;
+      cursor: pointer;
+  }
+  nav .login button:hover {
+    background: white;
+    color: #d50d65;
+    transition: 0.3s;
+  }
+
+  /* Balance and services */
+  .balance-services {
+    margin: 25px 60px 15px 60px;
+      display: flex;
+      align-items: center;
+    gap: 35px;
+  }
+  .balance {
+    background: #c0c0c0;
+    border-radius: 10px;
+    padding: 15px 25px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    gap: 15px;
+      flex-shrink: 0;
+  }
+  .balance svg {
+    width: 35px;
+    height: 35px;
+  }
+  .balance-text {
+    font-weight: 900;
+    font-size: 17px;
+  }
+  
+  .service {
+    background: #c0c0c0;
+    width: 55px;
+    height: 55px;
+      border-radius: 50%;
+      display: flex;
+    justify-content:center;
+      align-items: center;
+      cursor: pointer;
+    flex-shrink: 0;
+  }
+  .service svg {
+    width: 32px;
+    height: 32px;
+    fill: #6a2246;
+  }
+  .service-label {
+    font-size: 13px;
+    margin-top: 5px;
+    font-weight: 600;
+    color: #222;
+    text-align: center;
+  }
+  .service-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    margin-right: 20px;
+    min-width: 65px;
+  }
+
+  /* Sections Title */
+  h2.section-title {
+    margin: 25px 60px 15px 60px;
+    font-weight: 900;
+    font-size: 26px;
+  }
+
+  /* Food and Promo Slide Containers */
+  .scroll-container {
+    margin: 0 60px 30px 60px;
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+  .scroll-container::-webkit-scrollbar {
+    height: 6px;
+  }
+  .scroll-container::-webkit-scrollbar-thumb {
+    background-color: #d50d65;
+    border-radius: 3px;
+  }
+
+  /* Food/Promo Cards */
+  .card {
+    display: block;
+    flex: 0 0 auto;
+    width: 200px;
+    height: 150px;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    text-decoration: none;
+  }
+  .card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Responsiveness */
+  @media (max-width: 1024px) {
+    nav {
+      padding: 10px 16px;
+    }
+    .balance-services {
+      margin: 20px 24px 12px 24px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    h2.section-title {
+      margin: 20px 24px 12px 24px;
+      font-size: 22px;
+    }
+    .scroll-container {
+      margin: 0 24px 24px 24px;
+      gap: 12px;
+    }
+    .card {
+      width: 180px;
+      height: 130px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    nav ul {
+      gap: 14px;
+      margin-left: 14px;
+      font-size: 14px;
+    }
+    nav .search {
+      max-width: 160px;
+    }
+    .balance-services {
+      margin: 16px 16px 10px 16px;
+      gap: 16px;
+    }
+    .balance {
+      padding: 12px 16px;
+    }
+    .service-container {
+      margin-right: 12px;
+      min-width: 60px;
+    }
+    .service {
+      width: 52px;
+      height: 52px;
+    }
+    .service svg { width: 28px; height: 28px; }
+    .service-label { font-size: 12px; }
+    h2.section-title {
+      margin: 18px 16px 10px 16px;
+      font-size: 20px;
+    }
+    .scroll-container {
+      margin: 0 16px 20px 16px;
+      gap: 10px;
+    }
+    .card {
+      width: 160px;
+      height: 120px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    nav {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    nav .logo { flex-basis: 100%; font-size: 22px; }
+    nav ul { order: 3; width: 100%; justify-content: space-around; margin-left: 0; }
+    nav .profile { order: 2; }
+    nav .search { order: 4; flex: 1; max-width: none; }
+    nav .login { order: 5; width: 100%; justify-content: flex-end; }
+
+    .balance-services {
+      margin: 12px;
+      gap: 12px;
+    }
+    .balance {
+      padding: 10px 14px;
+    }
+    .balance svg { width: 28px; height: 28px; }
+    .balance-text { font-size: 15px; }
+
+    .service-container { margin-right: 10px; min-width: 56px; }
+    .service { width: 50px; height: 50px; }
+    .service svg { width: 26px; height: 26px; }
+    .service-label { font-size: 11px; }
+
+    h2.section-title {
+      margin: 14px 12px 8px 12px;
+      font-size: 18px;
+    }
+    .scroll-container {
+      margin: 0 12px 16px 12px;
+      gap: 8px;
+    }
+    .card {
+      width: 140px;
+      height: 100px;
+    }
+    }
+
+  /* Extra tweaks for better responsiveness and profile menu placement */
+  @media (max-width: 1024px) { nav ul { gap: 18px; } }
+  @media (max-width: 768px) { .profile-menu { right: 12px; top: 54px; } }
+  @media (max-width: 480px) { .profile-menu { left: 10px; right: 10px; top: 52px; min-width: 0; } }
+  @media (max-width: 360px) {
+    nav { padding: 8px 12px; }
+    nav ul { gap: 10px; font-size: 13px; }
+    .balance-services { margin: 10px; gap: 10px; }
+    h2.section-title { margin: 12px 10px 8px 10px; font-size: 17px; }
+    .scroll-container { margin: 0 10px 14px 10px; gap: 6px; }
+    .card { width: 130px; height: 92px; }
+    .profile-menu { left: 8px; right: 8px; top: 50px; }
+  }
+  /* Bottom navigation */
+  .bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, #363A82 18.75%, #358791 92.87%, #FFFFFF 100%);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 12px;
+    box-shadow: 0 -6px 14px rgba(0,0,0,0.15);
+    z-index: 1000;
+  }
+  .bottom-nav button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .bottom-nav button:focus,
+  .bottom-nav button:hover {
+    background: rgba(255,255,255,0.15);
+    outline: none;
+  }
+  .bottom-nav svg { width: 22px; height: 22px; stroke: currentColor; fill: none; }
+
+  /* Prevent content being hidden behind bottom nav */
+  body.has-bottom-nav { padding-bottom: 74px; }
+
+  @media (max-width: 480px) {
+    .bottom-nav { padding: 6px 8px; }
+    .bottom-nav button { font-size: 11px; gap: 4px; }
+    .bottom-nav svg { width: 20px; height: 20px; }
+    body.has-bottom-nav { padding-bottom: 68px; }
+  }
+  </style>
+</head>
+<body class="has-bottom-nav">
+
+<div id="pageTransition" style="position:fixed;inset:0;background:#fff;opacity:1;pointer-events:none;transition:opacity .35s ease;z-index:2000"></div>
+
+<nav>
+  <div class="logo">ANTERIN</div>
+  <ul>
+    <li>Beranda</li>
+    <li>Promo</li>
+    <li>Order</li>
+  </ul>
+  <div class="profile" aria-label="User profile" role="button" tabindex="0" id="profileButton" aria-haspopup="true" aria-expanded="false">
+    <!-- User icon SVG -->
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+  <div class="search" role="search">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 21l-4.35-4.35M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    <input type="search" placeholder="Cari lokasi" aria-label="Cari lokasi" />
+    <div class="search-history" id="searchHistory" role="listbox" aria-label="Riwayat pencarian">
+      <button type="button" role="option">SMK Metland</button>
+      <button type="button" role="option">Metropolitan Mall</button>
+      <button type="button" role="option">Citra Indah City</button>
+      <button type="button" role="option">Jalan Kota Wisata</button>
+    </div>
+      </div>
+  <div class="login">
+    <button type="button" onclick="location.href='login.html'">LOGIN</button>
+        </div>
+  <div class="profile-menu" id="profileMenu" role="menu" aria-label="Profile menu">
+    <button type="button" role="menuitem" id="helpServiceBtn">Help Service</button>
+    <button type="button" role="menuitem" id="logoutBtn">Log out</button>
+  </div>
+</nav>
+
+<div class="balance-services">
+  <div class="balance" aria-label="Saldo Rp1.000.000">
+    <svg width="72" height="78" viewBox="0 0 72 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="36.3127" cy="39.0589" rx="35.3998" ry="38.8797" fill="#DADADA"/>
+      <g clip-path="url(#clip0_22_98)">
+      <path d="M45.0828 50.2547H47.4667M49.8506 55.0224V66.9418H9.32483V33.5676H49.8506V45.487" stroke="black" stroke-width="2.66667" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M16.4764 33.5676V66.9418M18.2262 29.7677L24.634 19.858M19.0439 33.5676L16.4764 21.6101L58.4301 12.6039L63.4339 35.9133L49.8506 38.8288M60.1823 20.7615L50.2725 14.356M61.6817 27.7557L55.2763 37.6631M52.2345 55.0224H41.5071L37.9313 50.2547L41.5071 45.487H52.2345V55.0224Z" stroke="black" stroke-width="2.66667" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M41.2853 23.5983L36.6225 24.5995L35.9574 27.1812L37.6237 29.2624L42.2866 28.2611L43.9505 30.3422L43.2854 32.9216L40.2793 33.5676M38.9539 24.0989L38.4533 21.7675" stroke="black" stroke-width="2.66667" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <defs>
+      <clipPath id="clip0_22_98">
+      <rect width="57.2128" height="57.2128" fill="white" transform="translate(8.13293 10.9209)"/>
+              </clipPath>
+              </defs>
+              </svg>
+    <div class="balance-text">Rp1.000.000</div>
+  </div>
+
+  <div class="service-container">
+    <div class="service" title="AnRide">
+      <svg width="78" height="78" viewBox="0 0 78 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M27.1972 32.9391L36.3072 26.5123H47.5285L44.0194 16.872H35.6645V10.4452H48.5182L52.0273 20.0854H64.5853V29.7257H55.5363L60.215 42.5858C63.7651 42.6986 67.1494 44.1141 69.7227 46.5623C72.2961 49.0105 73.8783 52.3202 74.1678 55.8602C74.4573 59.4003 73.4338 62.923 71.2924 65.7568C69.1511 68.5905 66.0416 70.5371 62.5571 71.2252C59.0725 71.9133 55.4566 71.2949 52.3988 69.4879C49.3409 67.6809 47.0551 64.8117 45.9772 61.4273C44.8993 58.043 45.1046 54.3803 46.5541 51.1377C48.0036 47.8951 50.5958 45.2993 53.8364 43.8454L49.8646 32.9391H46.8215L41.7379 51.8018L32.3387 55.237C32.4136 55.8282 32.4511 56.4292 32.4511 57.0397C32.4503 59.6906 31.7209 62.2902 30.3425 64.5545C28.964 66.8188 26.9897 68.6606 24.6353 69.8787C22.2809 71.0968 19.6369 71.6442 16.9924 71.4612C14.3478 71.2782 11.8045 70.3717 9.64029 68.8409C7.4761 67.3101 5.77434 65.2139 4.72101 62.7813C3.66767 60.3486 3.30328 57.6733 3.66767 55.0476C4.03206 52.4219 5.1112 49.9469 6.78715 47.8931C8.46311 45.8392 10.6714 44.2856 13.1706 43.402V39.3659H6.74382V32.9391H27.1972ZM17.9908 65.0732C20.1214 65.0732 22.1648 64.2268 23.6713 62.7203C25.1779 61.2137 26.0243 59.1703 26.0243 57.0397C26.0243 54.9091 25.1779 52.8657 23.6713 51.3591C22.1648 49.8526 20.1214 49.0062 17.9908 49.0062C15.8601 49.0062 13.8168 49.8526 12.3102 51.3591C10.8036 52.8657 9.95723 54.9091 9.95723 57.0397C9.95723 59.1703 10.8036 61.2137 12.3102 62.7203C13.8168 64.2268 15.8601 65.0732 17.9908 65.0732ZM59.7652 65.0732C61.8958 65.0732 63.9391 64.2268 65.4457 62.7203C66.9523 61.2137 67.7987 59.1703 67.7987 57.0397C67.7987 54.9091 66.9523 52.8657 65.4457 51.3591C63.9391 49.8526 61.8958 49.0062 59.7652 49.0062C57.6345 49.0062 55.5912 49.8526 54.0846 51.3591C52.578 52.8657 51.7316 54.9091 51.7316 57.0397C51.7316 59.1703 52.578 61.2137 54.0846 62.7203C55.5912 64.2268 57.6345 65.0732 59.7652 65.0732Z" fill="url(#paint0_linear_18_84)"/>
+        <defs>
+        <linearGradient id="paint0_linear_18_84" x1="38.8732" y1="10.4452" x2="38.8732" y2="71.4992" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#3A6392"/>
+        <stop offset="1" stop-color="#4CA686"/>
+        </linearGradient>
+        </defs>
+        </svg>
+
+    </div>
+    <div class="service-label">AnRide</div>
+  </div>
+
+  <div class="service-container">
+    <div class="service" title="AnCar">
+      <svg width="75" height="74" viewBox="0 0 75 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_18_56)">
+        <path d="M12.246 56.0402C12.246 58.1043 13.0659 60.0839 14.5255 61.5435C15.9851 63.0031 17.9647 63.823 20.0288 63.823C22.093 63.823 24.0726 63.0031 25.5321 61.5435C26.9917 60.0839 27.8117 58.1043 27.8117 56.0402C27.8117 53.976 26.9917 51.9964 25.5321 50.5369C24.0726 49.0773 22.093 48.2573 20.0288 48.2573C17.9647 48.2573 15.9851 49.0773 14.5255 50.5369C13.0659 51.9964 12.246 53.976 12.246 56.0402ZM51.1603 56.0402C51.1603 58.1043 51.9802 60.0839 53.4398 61.5435C54.8994 63.0031 56.879 63.823 58.9431 63.823C61.0073 63.823 62.9869 63.0031 64.4464 61.5435C65.906 60.0839 66.726 58.1043 66.726 56.0402C66.726 53.976 65.906 51.9964 64.4464 50.5369C62.9869 49.0773 61.0073 48.2573 58.9431 48.2573C56.879 48.2573 54.8994 49.0773 53.4398 50.5369C51.9802 51.9964 51.1603 53.976 51.1603 56.0402Z" stroke="url(#paint0_linear_18_56)" stroke-width="5.33333" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12.246 56.0402H4.46313V32.6916M4.46313 32.6916L12.246 13.2345H47.2689L62.8346 32.6916M4.46313 32.6916H62.8346M62.8346 32.6916H66.726C68.7901 32.6916 70.7697 33.5116 72.2293 34.9712C73.6889 36.4308 74.5089 38.4104 74.5089 40.4745V56.0402H66.726M51.1603 56.0402H27.8117M39.486 32.6916V13.2345" stroke="url(#paint1_linear_18_56)" stroke-width="5.33333" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <defs>
+        <linearGradient id="paint0_linear_18_56" x1="39.486" y1="48.2573" x2="39.486" y2="63.823" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#3A6392"/>
+        <stop offset="1" stop-color="#4CA686"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_18_56" x1="39.486" y1="13.2345" x2="39.486" y2="56.0402" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#3A6392"/>
+        <stop offset="1" stop-color="#4CA686"/>
+        </linearGradient>
+        <clipPath id="clip0_18_56">
+        <rect width="73.7982" height="73.7982" fill="white" transform="translate(0.710693 0.100952)"/>
+        </clipPath>
+        </defs>
+        </svg>
+        
+        
+
+      </div>
+    <div class="service-label">AnCar</div>
+        </div>
+
+  <div class="service-container">
+    <div class="service" title="AnFood" aria-label="AnFood" tabindex="0" onclick="go('anfood.html')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();go('anfood.html')}">
+      <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M31.4826 3.92447C31.8262 4.09085 32.1287 4.33129 32.3683 4.62851C32.6079 4.92572 32.7787 5.27232 32.8684 5.64341C32.9652 6.0509 35.6198 16.9545 35.6876 24.2842C35.7331 29.1947 33.4889 33.594 29.9589 36.4647C28.6762 37.5105 28.0663 38.6431 28.075 39.5838L28.0983 42.0959C28.0994 42.2166 28.1073 42.3302 28.1221 42.4369C28.3097 43.7172 28.9896 48.472 29.6297 53.4029C30.2586 58.2408 30.8812 63.5182 30.9013 65.684C30.9266 68.4259 29.8618 71.0654 27.941 73.0221C26.0202 74.9788 23.4007 76.0923 20.6589 76.1177C17.9171 76.1431 15.2775 75.0782 13.3208 73.1574C11.3641 71.2366 10.2506 68.6172 10.2253 65.8754C10.2052 63.7044 10.7301 58.4267 11.2694 53.5728C11.8181 48.6309 12.4099 43.8643 12.5737 42.5808L12.5913 42.2394L12.568 39.7273C12.5593 38.7865 11.9286 37.6654 10.6268 36.6436C8.79119 35.2079 7.30275 33.377 6.27209 31.287C5.24144 29.1969 4.69508 26.9014 4.67362 24.5712C4.60603 17.2674 7.03826 6.37351 7.14748 5.88657C7.27654 5.31074 7.5969 4.79563 8.0563 4.42525C8.5157 4.05486 9.08705 3.85106 9.67715 3.84708C11.1245 3.83369 12.3087 4.9962 12.3221 6.44352L12.4655 21.9402C12.4483 22.2894 12.5029 22.6385 12.626 22.9658C12.749 23.2931 12.9378 23.5918 13.1807 23.8433C13.4236 24.0948 13.7155 24.2939 14.0383 24.4282C14.3612 24.5625 14.7081 24.6292 15.0578 24.6242C15.4074 24.6192 15.7523 24.5426 16.0712 24.3991C16.3901 24.2556 16.6761 24.0482 16.9118 23.7899C17.1474 23.5315 17.3276 23.2276 17.4411 22.8969C17.5547 22.5662 17.5993 22.2157 17.5722 21.8671L17.4287 6.36008C17.4224 5.67463 17.6886 5.01473 18.1688 4.52556C18.649 4.03638 19.3039 3.75801 19.9893 3.75166C20.6748 3.74532 21.3347 4.01153 21.8238 4.49174C22.313 4.97194 22.5914 5.6268 22.5977 6.31225L22.7425 21.9537C22.7631 22.6321 23.0525 23.2746 23.5468 23.7397C24.0412 24.2048 24.7001 24.4545 25.3786 24.4339C26.057 24.4132 26.6995 24.1238 27.1646 23.6295C27.6297 23.1351 27.8794 22.4762 27.8588 21.7978L27.7153 6.29074C27.7019 4.84859 28.8593 3.66959 30.3066 3.6562C30.4204 3.65514 30.9269 3.65046 31.4826 3.92447ZM43.465 26.7969C43.408 20.6279 45.8039 14.6888 50.1257 10.2862C54.4475 5.88368 60.3413 3.37828 66.5103 3.3212C67.1958 3.31486 67.8557 3.58107 68.3448 4.06127C68.834 4.54148 69.1124 5.19634 69.1187 5.88179L69.4044 36.7562L69.5111 37.6703C69.9579 41.5243 70.3882 45.3802 70.8019 49.2379C71.4978 55.7243 72.2319 62.996 72.2533 65.3014C72.2786 68.0432 71.2138 70.6828 69.293 72.6395C67.3722 74.5962 64.7527 75.7097 62.0109 75.7351C59.2691 75.7604 56.6295 74.6956 54.6728 72.7748C52.7161 70.854 51.6026 68.2345 51.5773 65.4927C51.5559 63.1874 52.1554 55.9032 52.7311 49.4051C53.0263 46.1094 53.3228 42.9533 53.5441 40.6147L53.6383 39.6264L48.7536 39.6716C47.3827 39.6843 46.0629 39.1519 45.0846 38.1915C44.1062 37.2311 43.5495 35.9214 43.5368 34.5504L43.465 26.7969Z" fill="url(#paint0_linear_180_972)"/>
+        <defs>
+        <linearGradient id="paint0_linear_180_972" x1="38.0808" y1="3.58425" x2="38.7504" y2="75.9503" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#3A6392"/>
+        <stop offset="1" stop-color="#4CA686"/>
+        </linearGradient>
+        </defs>
+        </svg>
+        
+    </div>
+    <div class="service-label">AnFood</div>
+  </div>
+
+  <div class="service-container">
+    <div class="service" title="AnKet">
+      <svg width="94" height="93" viewBox="0 0 94 93" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.5367 11.7284C17.8093 11.7284 17.1608 12.2325 16.9107 12.9907L12.4695 26.4817C12.3293 26.9083 12.2578 27.3545 12.2578 27.8036V33.1704C12.2578 36.205 14.4726 38.668 17.2051 38.668C19.9375 38.668 22.1543 36.205 22.1543 33.1704C22.1543 36.2069 24.3691 38.668 27.1015 38.668C29.834 38.668 32.0507 36.205 32.0507 33.1704C32.0507 36.2069 34.2655 38.668 36.998 38.668C39.7304 38.668 41.9433 36.2088 41.9472 33.1742C41.9472 36.2088 44.162 38.668 46.8944 38.668C49.6269 38.668 51.8417 36.205 51.8417 33.1704C51.8417 36.2069 54.0585 38.668 56.7909 38.668C59.5233 38.668 61.7362 36.2088 61.7382 33.1742C61.7401 36.2088 63.9549 38.668 66.6874 38.668C69.4198 38.668 71.6346 36.205 71.6346 33.1704C71.6346 36.2069 73.8494 38.668 76.5838 38.668C79.3163 38.668 81.5311 36.205 81.5311 33.1704V27.8036C81.5311 27.3545 81.4596 26.9083 81.3194 26.4817L76.8782 12.9926C76.6281 12.2325 75.9796 11.7284 75.2522 11.7284H18.5367Z" fill="url(#paint0_linear_161_528)"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M19.9548 41.0349V55.9863H15.1442C14.889 55.9863 14.6443 56.0877 14.4639 56.2682C14.2834 56.4486 14.1821 56.6933 14.1821 56.9485V58.8727C14.1821 59.1279 14.2834 59.3726 14.4639 59.5531C14.6443 59.7335 14.889 59.8349 15.1442 59.8349H78.6447C78.8999 59.8349 79.1446 59.7335 79.325 59.5531C79.5055 59.3726 79.6068 59.1279 79.6068 58.8727V56.9485C79.6068 56.6933 79.5055 56.4486 79.325 56.2682C79.1446 56.0877 78.8999 55.9863 78.6447 55.9863H73.8341V41.0349C73.0283 40.7144 72.2841 40.2567 71.6346 39.6821C71.1351 40.1213 70.5808 40.4938 69.9855 40.7905V55.9863H23.8034V40.7905C23.2081 40.4938 22.6538 40.1213 22.1543 39.6821C21.5077 40.2498 20.7688 40.7116 19.9548 41.0349ZM69.9855 37.2691C70.1485 37.1062 70.3024 36.9311 70.4474 36.7438H69.9855V37.2691ZM72.8219 36.7438C73.1137 37.1199 73.454 37.4557 73.8341 37.7425V36.7438H72.8219ZM19.9548 37.7425C20.3381 37.4595 20.6789 37.1232 20.967 36.7438H19.9548V37.7425ZM23.3415 36.7438H23.8034V37.2691C23.6389 37.1035 23.4847 36.9281 23.3415 36.7438ZM17.0685 63.6834C16.8133 63.6834 16.5686 63.7847 16.3881 63.9652C16.2077 64.1456 16.1063 64.3903 16.1063 64.6455V79.0774C16.1063 79.5878 16.3091 80.0772 16.6699 80.4381C17.0308 80.799 17.5202 81.0017 18.0306 81.0017H75.7583C76.2687 81.0017 76.7581 80.799 77.119 80.4381C77.4798 80.0772 77.6826 79.5878 77.6826 79.0774V64.6455C77.6826 64.3903 77.5812 64.1456 77.4008 63.9652C77.2203 63.7847 76.9756 63.6834 76.7204 63.6834H17.0685Z" fill="url(#paint1_linear_161_528)"/>
+        <path d="M27.6519 51.1756C27.6519 50.9205 27.7532 50.6757 27.9337 50.4953C28.1141 50.3149 28.3588 50.2135 28.614 50.2135H34.3868C34.6419 50.2135 34.8867 50.3149 35.0671 50.4953C35.2475 50.6757 35.3489 50.9205 35.3489 51.1756V55.0241C35.3489 55.2793 35.2475 55.524 35.0671 55.7045C34.8867 55.8849 34.6419 55.9863 34.3868 55.9863H28.614C28.3588 55.9863 28.1141 55.8849 27.9337 55.7045C27.7532 55.524 27.6519 55.2793 27.6519 55.0241V51.1756Z" fill="url(#paint2_linear_161_528)"/>
+        <path d="M31.5004 53.0999C31.5004 52.8447 31.6017 52.6 31.7822 52.4196C31.9626 52.2391 32.2073 52.1378 32.4625 52.1378H38.2353C38.4904 52.1378 38.7352 52.2391 38.9156 52.4196C39.096 52.6 39.1974 52.8447 39.1974 53.0999V55.0241C39.1974 55.2793 39.096 55.524 38.9156 55.7045C38.7352 55.8849 38.4904 55.9863 38.2353 55.9863H32.4625C32.2073 55.9863 31.9626 55.8849 31.7822 55.7045C31.6017 55.524 31.5004 55.2793 31.5004 55.0241V53.0999ZM46.8944 53.0999C46.8944 53.8654 46.5903 54.5996 46.049 55.1409C45.5077 55.6822 44.7736 55.9863 44.008 55.9863C43.2425 55.9863 42.5084 55.6822 41.9671 55.1409C41.4258 54.5996 41.1217 53.8654 41.1217 53.0999C41.1217 52.3344 41.4258 51.6002 41.9671 51.0589C42.5084 50.5176 43.2425 50.2135 44.008 50.2135C44.7736 50.2135 45.5077 50.5176 46.049 51.0589C46.5903 51.6002 46.8944 52.3344 46.8944 53.0999Z" fill="url(#paint3_linear_161_528)"/>
+        <defs>
+        <linearGradient id="paint0_linear_161_528" x1="46.8944" y1="11.7284" x2="46.8944" y2="38.668" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#3A6392"/>
+        <stop offset="1" stop-color="#4CA686"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_161_528" x1="46.8944" y1="36.7438" x2="46.8944" y2="81.0017" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#3A6392"/>
+        <stop offset="1" stop-color="#4CA686"/>
+        </linearGradient>
+        <linearGradient id="paint2_linear_161_528" x1="31.5004" y1="50.2135" x2="31.5004" y2="55.9863" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#3A6392"/>
+        <stop offset="1" stop-color="#4CA686"/>
+        </linearGradient>
+        <linearGradient id="paint3_linear_161_528" x1="39.1974" y1="50.2135" x2="39.1974" y2="55.9863" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#3A6392"/>
+        <stop offset="1" stop-color="#4CA686"/>
+        </linearGradient>
+        </defs>
+        </svg>
+        
+      </div>
+    <div class="service-label">AnKet</div>
+  </div>
+      </div>
+  
+<h2 class="section-title">Makanan didekat anda</h2>
+<div class="scroll-container" aria-label="Menu makanan didekat anda">
+  <div class="card">
+    <img src="https://i.pinimg.com/1200x/14/bc/51/14bc517d7df32ccba54d4a83489d46b9.jpg" alt="Delicious Food Menu" />
+  </div>
+  <div class="card">
+    <img src="https://i.pinimg.com/736x/0f/ac/c4/0facc46c76adb7d45b28039f36262b65.jpg" alt="Bor celle Spesialit Lalapan Sambal" />
+  </div>
+  <div class="card">
+    <img src="https://i.pinimg.com/736x/db/03/50/db035078fc431bda5b3e65f6547dd75c.jpg" alt="Super Delicious Menu" />
+  </div>
+  <div class="card">
+    <img src="https://i.pinimg.com/736x/80/5f/5a/805f5aea76993a695903222449693d2d.jpg" alt="Seafood Restaurant" />
+  </div>
+  <div class="card">
+    <img src="https://i.pinimg.com/736x/03/37/bc/0337bc665b7bc71e3740decb3f1426d1.jpg" alt="Menu Makanan 5" />
+      </div>
+      </div>
+
+<h2 class="section-title">Anterin Diskon</h2>
+<div class="scroll-container" aria-label="Promo diskon anterin">
+  <a class="card" href="aktivasi.html" aria-label="Seafood Save up to 50%">
+    <img src="https://i.pinimg.com/1200x/ec/37/a3/ec37a3f777b8942c3124e0c909de9d46.jpg" alt="Seafood Save up to 50%" />
+  </a>
+  <a class="card" href="aktivasi.html" aria-label="Birthday Treat 30% Discount">
+    <img src="https://i.pinimg.com/736x/6a/9f/a0/6a9fa06bc4a531922450a4f1e2be9d29.jpg" alt="Birthday Treat 30% Discount" />
+  </a>
+  <a class="card" href="aktivasi.html" aria-label="Discount 25%">
+    <img src="https://i.pinimg.com/736x/98/28/ff/9828ff2a5890927c1b085cfa2d69001a.jpg" alt="Discount 25%" />
+  </a>
+  <a class="card" href="aktivasi.html" aria-label="Promo Merdeka Diskon 17%">
+    <img src="https://i.pinimg.com/736x/f7/4f/b9/f74fb962134ca8e8ab7717700d0055e5.jpg" alt="Promo Merdeka Diskon 17%" />
+      </a>
+  <a class="card" href="aktivasi.html" aria-label="Promo 5">
+    <img src="https://i.pinimg.com/736x/3d/d9/2e/3dd92e357589f09a9465e7dd6b76f383.jpg" alt="Promo 5" />
+      </a>
+      </div>
+
+  </main>
+  <script>
+    // Header shrink on scroll
+    (function() {
+      const header = document.querySelector('header');
+      let lastY = 0;
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY || window.pageYOffset;
+        if (y > 10 && y >= lastY) {
+          header.style.padding = '0.5rem 1.5rem';
+          header.style.boxShadow = '0 8px 14px -8px rgba(231, 7, 127, 0.8)';
+        } else if (y <= 10) {
+          header.style.padding = '0.75rem 2rem';
+          header.style.boxShadow = '0 8px 12px -8px rgba(231, 7, 127, 0.7)';
+        }
+        lastY = y;
+      });
+    })();
+
+    // Auto-scroll horizontal lists (ping-pong)
+    (function() {
+      const scrollers = document.querySelectorAll('.horizontal-scroll');
+      scrollers.forEach(scroller => {
+        let dir = 1; // 1: right, -1: left
+        let rafId;
+        const speed = 0.5; // px per frame
+
+        function step() {
+          scroller.scrollLeft += dir * speed;
+          const max = scroller.scrollWidth - scroller.clientWidth;
+          if (scroller.scrollLeft <= 0) dir = 1;
+          if (scroller.scrollLeft >= max - 1) dir = -1;
+          rafId = requestAnimationFrame(step);
+        }
+
+        // Start when in view
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              if (!rafId) rafId = requestAnimationFrame(step);
+            } else {
+              if (rafId) cancelAnimationFrame(rafId), rafId = undefined;
+            }
+          });
+        }, { threshold: 0.1 });
+        io.observe(scroller);
+
+        // Pause on user hover/focus
+        scroller.addEventListener('mouseenter', () => { if (rafId) cancelAnimationFrame(rafId), rafId = undefined; });
+        scroller.addEventListener('mouseleave', () => { if (!rafId) rafId = requestAnimationFrame(step); });
+        scroller.addEventListener('focusin', () => { if (rafId) cancelAnimationFrame(rafId), rafId = undefined; });
+        scroller.addEventListener('focusout', () => { if (!rafId) rafId = requestAnimationFrame(step); });
+      });
+    })();
+
+    // Ripple effect for buttons and category items
+    (function() {
+      const rippleTargets = [
+        ...document.querySelectorAll('.qris-topup button'),
+        ...document.querySelectorAll('.category-item'),
+        ...document.querySelectorAll('.login-btn')
+      ];
+      rippleTargets.forEach(el => {
+        el.style.position = el.style.position || 'relative';
+        el.style.overflow = 'hidden';
+        el.addEventListener('click', function(ev) {
+          const rect = this.getBoundingClientRect();
+          const circle = document.createElement('span');
+          const size = Math.max(rect.width, rect.height) * 1.2;
+          const x = ev.clientX - rect.left - size / 2;
+          const y = ev.clientY - rect.top - size / 2;
+          circle.style.position = 'absolute';
+          circle.style.left = x + 'px';
+          circle.style.top = y + 'px';
+          circle.style.width = size + 'px';
+          circle.style.height = size + 'px';
+          circle.style.borderRadius = '50%';
+          circle.style.background = 'rgba(255,255,255,0.35)';
+          circle.style.transform = 'scale(0)';
+          circle.style.transition = 'transform 450ms ease, opacity 600ms ease';
+          circle.style.pointerEvents = 'none';
+          this.appendChild(circle);
+          // trigger
+          requestAnimationFrame(() => {
+            circle.style.transform = 'scale(1)';
+            circle.style.opacity = '0';
+          });
+          setTimeout(() => circle.remove(), 650);
+        });
+      });
+    })();
+
+    // Toast helper
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.textContent = message;
+      toast.style.position = 'fixed';
+      toast.style.left = '50%';
+      toast.style.bottom = '24px';
+      toast.style.transform = 'translateX(-50%)';
+      toast.style.background = '#111';
+      toast.style.color = '#fff';
+      toast.style.padding = '10px 14px';
+      toast.style.borderRadius = '8px';
+      toast.style.boxShadow = '0 6px 18px rgba(0,0,0,0.25)';
+      toast.style.zIndex = '9999';
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 250ms ease, transform 250ms ease';
+      document.body.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(-6px)';
+      });
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+        setTimeout(() => toast.remove(), 260);
+      }, 1700);
+    }
+
+    // Actions: Top Up toast, keyboard enter/space activation
+    (function() {
+      const topUpBtn = document.querySelector('.qris-topup button:nth-of-type(2)');
+      if (topUpBtn) {
+        topUpBtn.addEventListener('click', () => { location.href = 'topup.html'; });
+        topUpBtn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); topUpBtn.click(); }
+        });
+      }
+      // Make category-items clickable via keyboard too
+      document.querySelectorAll('.category-item').forEach(item => {
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            showToast(item.getAttribute('aria-label'));
+          }
+        });
+        item.addEventListener('click', () => showToast(item.getAttribute('aria-label')));
+      });
+    })();
+
+    // Swap profile icon with user image if logged in
+    (function() {
+      try {
+        const isLoggedIn = localStorage.getItem('anterin_logged_in') === '1';
+        const avatarUrl = localStorage.getItem('anterin_profile_image') || 'blob:https://web.whatsapp.com/925e51f4-5b08-4bca-839f-7ff5a15d2ac5';
+        if (isLoggedIn) {
+          const profile = document.querySelector('nav .profile');
+          if (profile) {
+            profile.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = avatarUrl;
+            img.alt = 'User profile';
+            profile.appendChild(img);
+          }
+        }
+      } catch (_) { /* no-op */ }
+    })();
+
+    // Profile dropdown interactions
+    (function() {
+      const btn = document.getElementById('profileButton');
+      const menu = document.getElementById('profileMenu');
+      if (!btn || !menu) return;
+
+      function toggleMenu(show) {
+        const shouldShow = show !== undefined ? show : !menu.classList.contains('open');
+        menu.classList.toggle('open', shouldShow);
+        btn.setAttribute('aria-expanded', shouldShow ? 'true' : 'false');
+      }
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
+      });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleMenu(); }
+        if (e.key === 'Escape') { toggleMenu(false); }
+      });
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && e.target !== btn) { toggleMenu(false); }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') toggleMenu(false);
+      });
+
+      // Help Service
+      const helpBtn = document.getElementById('helpServiceBtn');
+      if (helpBtn) {
+        helpBtn.addEventListener('click', () => {
+          toggleMenu(false);
+          showToast('Help Service coming soon');
+        });
+      }
+
+      // Logout
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          try {
+            localStorage.removeItem('anterin_logged_in');
+            localStorage.removeItem('anterin_profile_image');
+          } catch (_) {}
+          // Revert profile to default icon
+          const profile = document.querySelector('nav .profile');
+          if (profile) {
+            profile.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+          }
+          toggleMenu(false);
+          showToast('Anda telah logout');
+        });
+      }
+    })();
+
+    // Search history interactions
+    (function() {
+      const searchWrap = document.querySelector('nav .search');
+      if (!searchWrap) return;
+      const input = searchWrap.querySelector('input[type="search"]');
+      const dropdown = searchWrap.querySelector('#searchHistory');
+      const items = Array.from(dropdown.querySelectorAll('button'));
+
+      function open() { dropdown.classList.add('open'); }
+      function close() { dropdown.classList.remove('open'); }
+      function filter(value) {
+        const v = value.trim().toLowerCase();
+        items.forEach(btn => {
+          const show = btn.textContent.toLowerCase().includes(v);
+          btn.style.display = show ? 'block' : 'none';
+        });
+      }
+
+      input.addEventListener('focus', () => { open(); filter(input.value); });
+      input.addEventListener('input', () => { open(); filter(input.value); });
+      input.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+      items.forEach(btn => btn.addEventListener('click', () => {
+        input.value = btn.textContent;
+        close();
+        showToast(btn.textContent);
+      }));
+
+      document.addEventListener('click', (e) => {
+        if (!searchWrap.contains(e.target)) close();
+      });
+    })();
+  </script>
+  <script>
+    // Page transition: fade-in on load, fade-out on link click
+    (function(){
+      const overlay = document.getElementById('pageTransition');
+      function fadeIn() { if (overlay) overlay.style.opacity = '0'; }
+      function fadeOut(cb){ if (!overlay){ cb(); return; } overlay.style.pointerEvents = 'auto'; overlay.style.opacity = '1'; setTimeout(cb, 280); }
+      window.addEventListener('load', fadeIn);
+      window.addEventListener('pageshow', fadeIn);
+      document.addEventListener('click', function(e){
+        const a = e.target.closest('a');
+        if (!a) return;
+        const url = a.getAttribute('href');
+        if (!url || url.startsWith('#') || a.target === '_blank') return;
+        const isSameOrigin = url.indexOf('http') !== 0;
+        if (!isSameOrigin) return;
+        e.preventDefault();
+        fadeOut(() => { window.location.href = url; });
+      });
+      // helper for inline handlers if needed
+      window.go = function(url){ fadeOut(() => { window.location.href = url; }); };
+    })();
+  </script>
+  
+  <nav class="bottom-nav" aria-label="Bottom navigation">
+    <button type="button" aria-label="Beranda" onclick="location.href='index.html'">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5l9-7 9 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v9h14v-9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Beranda</span>
+    </button>
+    <button type="button" aria-label="QRIS Scan" onclick="showToast('Fitur QRIS akan segera hadir')">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" stroke-width="2"/><rect x="15" y="3" width="6" height="6" rx="1.5" stroke-width="2"/><rect x="3" y="15" width="6" height="6" rx="1.5" stroke-width="2"/><rect x="15" y="15" width="6" height="6" rx="1.5" stroke-width="2"/></svg>
+      <span>QRIS</span>
+    </button>
+    <button type="button" aria-label="Top Up" onclick="location.href='topup.html'">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Top Up</span>
+    </button>
+  </nav>
+</body>
+</html>
